@@ -6,17 +6,15 @@ export const worker = setupWorker(...handlers)
 
 // Start worker function
 export async function startMockServiceWorker() {
-  if (process.env.NODE_ENV === 'development') {
-    try {
-      await worker.start({
-        onUnhandledRequest: 'bypass', // Bypass unhandled requests
-        serviceWorker: {
-          url: '/mockServiceWorker.js',
-        },
-      })
-      console.log('🔶 MSW: Mock Service Worker is running')
-    } catch (error) {
-      console.error('MSW: Failed to start Mock Service Worker', error)
-    }
+  try {
+    await worker.start({
+      onUnhandledRequest: 'bypass', // Bypass unhandled requests
+      serviceWorker: {
+        url: '/mockServiceWorker.js',
+      },
+    })
+    console.log('🔶 MSW: Mock Service Worker is running')
+  } catch (error) {
+    console.error('MSW: Failed to start Mock Service Worker', error)
   }
 }

@@ -34,4 +34,16 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    // Preview mode (pnpm serve) proxy settings
+    // Only proxy when VITE_API_MODE=real, otherwise MSW will handle it
+    proxy: process.env.VITE_API_MODE === 'real'
+      ? {
+          '/api': {
+            target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
+            changeOrigin: true,
+          },
+        }
+      : {},
+  },
 })

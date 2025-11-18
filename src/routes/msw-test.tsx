@@ -136,7 +136,7 @@ function MswTestPage() {
           >
             {itemsLoading ? 'Loading...' : 'Fetch Items'}
           </button>
-          {itemsData && (
+          {itemsData && itemsData.items && (
             <div className="mt-4">
               <p className="mb-2 text-sm text-muted-foreground">
                 Total: {itemsData.total} items (캐시된 데이터)
@@ -248,7 +248,7 @@ function MswTestPage() {
           >
             {usersLoading ? 'Loading...' : 'Fetch Users'}
           </button>
-          {usersData && (
+          {usersData && usersData.users && (
             <div className="mt-4">
               <p className="mb-2 text-sm text-muted-foreground">
                 Total: {usersData.total} users
@@ -369,7 +369,7 @@ function MswTestPage() {
               {searchLoading ? 'Searching...' : 'Search'}
             </button>
           </div>
-          {searchData && (
+          {searchData && searchData.results && (
             <div className="mt-4">
               <p className="mb-2 text-sm text-muted-foreground">
                 Found {searchData.total} results for "{searchData.query}"

@@ -30,9 +30,9 @@ declare module '@tanstack/react-router' {
   }
 }
 
-// Start MSW in development mode with mock API
+// Start MSW when in mock mode (works in both dev and production)
 async function enableMocking() {
-  if (process.env.NODE_ENV === 'development' && API_CONFIG.mode === 'mock') {
+  if (API_CONFIG.mode === 'mock') {
     await startMockServiceWorker()
   }
 }
