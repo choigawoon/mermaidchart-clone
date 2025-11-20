@@ -62,19 +62,24 @@ export function getTestLanguage(): string {
 
 /**
  * Get translation for a key in a specific language
+ * Note: Uses type assertion for dynamic key testing
  */
 export function getTranslation(key: string, language: SupportedLanguage = 'en'): string {
-  return i18n.getFixedT(language)(key)
+  const t = i18n.getFixedT(language)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return t(key as any)
 }
 
 /**
  * Check if a translation key exists in all languages
+ * Note: Uses type assertion for dynamic key testing
  */
 export function translationKeyExists(key: string): boolean {
   const languages: SupportedLanguage[] = ['en', 'ko', 'ja']
   return languages.every(lang => {
     const t = i18n.getFixedT(lang)
-    const value = t(key)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const value = t(key as any)
     // If key doesn't exist, i18next returns the key itself
     return value !== key
   })

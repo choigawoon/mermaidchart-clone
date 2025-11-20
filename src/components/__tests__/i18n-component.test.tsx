@@ -205,7 +205,8 @@ describe('i18n Edge Cases', () => {
   it('should handle missing translation gracefully', () => {
     function MissingKeyComponent() {
       const { t } = useTranslation()
-      return <span data-testid="missing">{t('non.existent.key')}</span>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return <span data-testid="missing">{t('non.existent.key' as any)}</span>
     }
 
     renderWithI18n(<MissingKeyComponent />)
