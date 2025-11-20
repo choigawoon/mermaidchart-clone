@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   useHealthCheck,
   useItems,
@@ -16,6 +17,8 @@ export const Route = createFileRoute('/msw-test')({
 })
 
 function MswTestPage() {
+  const { t } = useTranslation()
+
   // Health check
   const { data: healthData, isLoading: healthLoading, error: healthError, refetch: refetchHealth } = useHealthCheck()
 
@@ -47,7 +50,7 @@ function MswTestPage() {
   // Create item handler
   const handleCreateItem = () => {
     if (!newItemName || !newItemDescription || !newItemPrice) {
-      alert('All fields are required')
+      alert(t('pages.mswTest.createItem.allFieldsRequired'))
       return
     }
 
@@ -55,7 +58,7 @@ function MswTestPage() {
       name: newItemName,
       description: newItemDescription,
       price: Number(newItemPrice),
-      category: '전자제품',
+      category: 'Electronics',
     }
 
     createItemMutation.mutate(itemData, {
@@ -90,27 +93,27 @@ function MswTestPage() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-foreground">
-            MSW + TanStack Query 테스트
+            {t('pages.mswTest.title')}
           </h1>
           <p className="mt-2 text-muted-foreground">
-            FastAPI 스타일의 모킹된 백엔드 API를 TanStack Query로 테스트해보세요
+            {t('pages.mswTest.description')}
           </p>
           <p className="mt-1 text-sm text-primary">
-            ✨ React Query DevTools를 열어서 캐싱과 상태를 확인해보세요!
+            {t('pages.mswTest.devToolsHint')}
           </p>
         </div>
 
         {/* Health Check Section */}
         <section className="mb-8 rounded-lg border border-border bg-card p-6">
           <h2 className="mb-4 text-2xl font-semibold text-card-foreground">
-            1. Health Check
+            {t('pages.mswTest.healthCheck.title')}
           </h2>
           <button
             onClick={() => refetchHealth()}
             disabled={healthLoading}
             className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
           >
-            {healthLoading ? 'Loading...' : 'Check Health'}
+            {healthLoading ? t('pages.mswTest.healthCheck.loading') : t('pages.mswTest.healthCheck.button')}
           </button>
           {healthData && (
             <pre className="mt-4 overflow-x-auto rounded-md bg-muted p-4 text-sm">
@@ -119,7 +122,7 @@ function MswTestPage() {
           )}
           {healthError && (
             <div className="mt-4 rounded-md bg-destructive/10 p-4 text-destructive">
-              Error: {healthError.message}
+              {t('common.error')}: {healthError.message}
             </div>
           )}
         </section>
@@ -127,19 +130,19 @@ function MswTestPage() {
         {/* Items List Section */}
         <section className="mb-8 rounded-lg border border-border bg-card p-6">
           <h2 className="mb-4 text-2xl font-semibold text-card-foreground">
-            2. Items List (GET /api/items)
+            {t('pages.mswTest.itemsList.title')}
           </h2>
           <button
             onClick={() => refetchItems()}
             disabled={itemsLoading}
             className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
           >
-            {itemsLoading ? 'Loading...' : 'Fetch Items'}
+            {itemsLoading ? t('pages.mswTest.itemsList.loading') : t('pages.mswTest.itemsList.fetchButton')}
           </button>
           {itemsData && itemsData.items && (
             <div className="mt-4">
               <p className="mb-2 text-sm text-muted-foreground">
-                Total: {itemsData.total} items (캐시된 데이터)
+                {t('pages.mswTest.itemsList.total', { count: itemsData.total })}
               </p>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {itemsData.items.map((item) => (
@@ -160,7 +163,7 @@ function MswTestPage() {
                         disabled={deleteItemMutation.isPending}
                         className="rounded bg-destructive px-3 py-1 text-sm text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50"
                       >
-                        {deleteItemMutation.isPending ? 'Deleting...' : 'Delete'}
+                        {deleteItemMutation.isPending ? t('pages.mswTest.itemsList.deleting') : t('pages.mswTest.itemsList.delete')}
                       </button>
                     </div>
                   </div>
@@ -170,7 +173,7 @@ function MswTestPage() {
           )}
           {itemsError && (
             <div className="mt-4 rounded-md bg-destructive/10 p-4 text-destructive">
-              Error: {itemsError.message}
+              {t('common.error')}: {itemsError.message}
             </div>
           )}
         </section>
@@ -178,39 +181,39 @@ function MswTestPage() {
         {/* Create Item Section */}
         <section className="mb-8 rounded-lg border border-border bg-card p-6">
           <h2 className="mb-4 text-2xl font-semibold text-card-foreground">
-            3. Create Item (POST /api/items)
+            {t('pages.mswTest.createItem.title')}
           </h2>
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium">Name</label>
+              <label className="mb-1 block text-sm font-medium">{t('pages.mswTest.createItem.nameLabel')}</label>
               <input
                 type="text"
                 value={newItemName}
                 onChange={(e) => setNewItemName(e.target.value)}
                 className="w-full rounded-md border border-input bg-background px-3 py-2"
-                placeholder="상품명"
+                placeholder={t('pages.mswTest.createItem.namePlaceholder')}
               />
             </div>
             <div>
               <label className="mb-1 block text-sm font-medium">
-                Description
+                {t('pages.mswTest.createItem.descriptionLabel')}
               </label>
               <input
                 type="text"
                 value={newItemDescription}
                 onChange={(e) => setNewItemDescription(e.target.value)}
                 className="w-full rounded-md border border-input bg-background px-3 py-2"
-                placeholder="상품 설명"
+                placeholder={t('pages.mswTest.createItem.descriptionPlaceholder')}
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium">Price</label>
+              <label className="mb-1 block text-sm font-medium">{t('pages.mswTest.createItem.priceLabel')}</label>
               <input
                 type="number"
                 value={newItemPrice}
                 onChange={(e) => setNewItemPrice(e.target.value)}
                 className="w-full rounded-md border border-input bg-background px-3 py-2"
-                placeholder="가격"
+                placeholder={t('pages.mswTest.createItem.pricePlaceholder')}
               />
             </div>
             <button
@@ -218,12 +221,12 @@ function MswTestPage() {
               disabled={createItemMutation.isPending}
               className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
             >
-              {createItemMutation.isPending ? 'Creating...' : 'Create Item'}
+              {createItemMutation.isPending ? t('pages.mswTest.createItem.creating') : t('pages.mswTest.createItem.button')}
             </button>
           </div>
           {createItemMutation.isSuccess && createItemMutation.data && (
             <div className="mt-4 rounded-md bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-300">
-              ✓ Item created successfully! (자동으로 리스트가 새로고침됩니다)
+              {t('pages.mswTest.createItem.success')}
               <pre className="mt-2 text-xs">
                 {JSON.stringify(createItemMutation.data, null, 2)}
               </pre>
@@ -231,7 +234,7 @@ function MswTestPage() {
           )}
           {createItemMutation.isError && (
             <div className="mt-4 rounded-md bg-destructive/10 p-4 text-destructive">
-              Error: {createItemMutation.error.message}
+              {t('common.error')}: {createItemMutation.error.message}
             </div>
           )}
         </section>
@@ -239,19 +242,19 @@ function MswTestPage() {
         {/* Users Section */}
         <section className="mb-8 rounded-lg border border-border bg-card p-6">
           <h2 className="mb-4 text-2xl font-semibold text-card-foreground">
-            4. Users List (GET /api/users)
+            {t('pages.mswTest.usersList.title')}
           </h2>
           <button
             onClick={() => refetchUsers()}
             disabled={usersLoading}
             className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
           >
-            {usersLoading ? 'Loading...' : 'Fetch Users'}
+            {usersLoading ? t('pages.mswTest.usersList.loading') : t('pages.mswTest.usersList.fetchButton')}
           </button>
           {usersData && usersData.users && (
             <div className="mt-4">
               <p className="mb-2 text-sm text-muted-foreground">
-                Total: {usersData.total} users
+                {t('pages.mswTest.usersList.total', { count: usersData.total })}
               </p>
               <div className="space-y-2">
                 {usersData.users.map((user) => (
@@ -269,7 +272,7 @@ function MswTestPage() {
                       <span
                         className={`rounded-full px-3 py-1 text-xs ${user.is_active ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300'}`}
                       >
-                        {user.is_active ? 'Active' : 'Inactive'}
+                        {user.is_active ? t('pages.mswTest.usersList.active') : t('pages.mswTest.usersList.inactive')}
                       </span>
                     </div>
                   </div>
@@ -279,7 +282,7 @@ function MswTestPage() {
           )}
           {usersError && (
             <div className="mt-4 rounded-md bg-destructive/10 p-4 text-destructive">
-              Error: {usersError.message}
+              {t('common.error')}: {usersError.message}
             </div>
           )}
         </section>
@@ -287,12 +290,12 @@ function MswTestPage() {
         {/* Login Section */}
         <section className="mb-8 rounded-lg border border-border bg-card p-6">
           <h2 className="mb-4 text-2xl font-semibold text-card-foreground">
-            5. Login (POST /api/auth/login)
+            {t('pages.mswTest.login.title')}
           </h2>
           <div className="space-y-4">
             <div>
               <label className="mb-1 block text-sm font-medium">
-                Username
+                {t('pages.mswTest.login.usernameLabel')}
               </label>
               <input
                 type="text"
@@ -304,7 +307,7 @@ function MswTestPage() {
             </div>
             <div>
               <label className="mb-1 block text-sm font-medium">
-                Password
+                {t('pages.mswTest.login.passwordLabel')}
               </label>
               <input
                 type="password"
@@ -319,15 +322,15 @@ function MswTestPage() {
               disabled={loginMutation.isPending}
               className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
             >
-              {loginMutation.isPending ? 'Logging in...' : 'Login'}
+              {loginMutation.isPending ? t('pages.mswTest.login.loggingIn') : t('pages.mswTest.login.button')}
             </button>
             <p className="text-sm text-muted-foreground">
-              Hint: username=admin, password=admin
+              {t('pages.mswTest.login.hint')}
             </p>
           </div>
           {loginMutation.isSuccess && loginMutation.data && (
             <div className="mt-4 rounded-md bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-300">
-              ✓ Login successful! Token stored in localStorage
+              {t('pages.mswTest.login.success')}
               <pre className="mt-2 overflow-x-auto text-xs">
                 {JSON.stringify(loginMutation.data, null, 2)}
               </pre>
@@ -335,7 +338,7 @@ function MswTestPage() {
           )}
           {loginMutation.isError && (
             <div className="mt-4 rounded-md bg-destructive/10 p-4 text-destructive">
-              Error: {loginMutation.error.message}
+              {t('common.error')}: {loginMutation.error.message}
             </div>
           )}
         </section>
@@ -343,7 +346,7 @@ function MswTestPage() {
         {/* Search Section */}
         <section className="mb-8 rounded-lg border border-border bg-card p-6">
           <h2 className="mb-4 text-2xl font-semibold text-card-foreground">
-            6. Search (GET /api/search?q=query)
+            {t('pages.mswTest.search.title')}
           </h2>
           <div className="flex gap-2">
             <input
@@ -359,20 +362,20 @@ function MswTestPage() {
                 }
               }}
               className="flex-1 rounded-md border border-input bg-background px-3 py-2"
-              placeholder="Search items..."
+              placeholder={t('pages.mswTest.search.placeholder')}
             />
             <button
               onClick={handleSearch}
               disabled={searchLoading}
               className="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
             >
-              {searchLoading ? 'Searching...' : 'Search'}
+              {searchLoading ? t('pages.mswTest.search.searching') : t('pages.mswTest.search.button')}
             </button>
           </div>
           {searchData && searchData.results && (
             <div className="mt-4">
               <p className="mb-2 text-sm text-muted-foreground">
-                Found {searchData.total} results for "{searchData.query}"
+                {t('pages.mswTest.search.results', { count: searchData.total, query: searchData.query })}
               </p>
               <div className="space-y-2">
                 {searchData.results.map((item) => (
@@ -394,7 +397,7 @@ function MswTestPage() {
           )}
           {searchError && (
             <div className="mt-4 rounded-md bg-destructive/10 p-4 text-destructive">
-              Error: {searchError.message}
+              {t('common.error')}: {searchError.message}
             </div>
           )}
         </section>
@@ -402,23 +405,23 @@ function MswTestPage() {
         {/* API Documentation */}
         <section className="rounded-lg border border-border bg-card p-6">
           <h2 className="mb-4 text-2xl font-semibold text-card-foreground">
-            📚 TanStack Query 장점
+            {t('pages.mswTest.benefits.title')}
           </h2>
           <div className="space-y-3 text-sm">
             <div className="rounded-md bg-muted p-3">
-              <strong>✅ 자동 캐싱:</strong> 데이터가 자동으로 캐시되어 불필요한 API 호출을 줄입니다
+              {t('pages.mswTest.benefits.caching')}
             </div>
             <div className="rounded-md bg-muted p-3">
-              <strong>✅ 자동 새로고침:</strong> Mutation 후 관련 쿼리가 자동으로 무효화됩니다
+              {t('pages.mswTest.benefits.refresh')}
             </div>
             <div className="rounded-md bg-muted p-3">
-              <strong>✅ 로딩/에러 상태:</strong> isLoading, isError, isPending이 자동 관리됩니다
+              {t('pages.mswTest.benefits.states')}
             </div>
             <div className="rounded-md bg-muted p-3">
-              <strong>✅ DevTools:</strong> React Query DevTools로 상태를 실시간 확인할 수 있습니다
+              {t('pages.mswTest.benefits.devtools')}
             </div>
             <div className="rounded-md bg-muted p-3">
-              <strong>✅ 백엔드 전환:</strong> .env 파일의 VITE_API_MODE를 'real'로 변경하면 실제 백엔드로 전환됩니다
+              {t('pages.mswTest.benefits.switching')}
             </div>
           </div>
         </section>

@@ -37,21 +37,175 @@
     },
     "mswTest": {
       "title": "MSW + TanStack Query 테스트",
-      "description": "Mock Service Worker를 사용한 API 모킹 테스트",
-      "items": "아이템",
-      "users": "사용자",
-      "createItem": "아이템 생성",
-      "createUser": "사용자 생성",
-      "noItems": "아이템이 없습니다",
-      "noUsers": "사용자가 없습니다"
+      "description": "FastAPI 스타일의 모킹된 백엔드 API를 TanStack Query로 테스트해보세요",
+      "devToolsHint": "React Query DevTools를 열어서 캐싱과 상태를 확인해보세요!",
+      "healthCheck": {
+        "title": "1. Health Check",
+        "button": "상태 확인",
+        "loading": "로딩 중..."
+      },
+      "itemsList": {
+        "title": "2. Items List (GET /api/items)",
+        "fetchButton": "아이템 불러오기",
+        "loading": "로딩 중...",
+        "total": "총: {{count}}개 아이템 (캐시된 데이터)",
+        "delete": "삭제",
+        "deleting": "삭제 중..."
+      },
+      "createItem": {
+        "title": "3. Create Item (POST /api/items)",
+        "nameLabel": "이름",
+        "namePlaceholder": "상품명",
+        "descriptionLabel": "설명",
+        "descriptionPlaceholder": "상품 설명",
+        "priceLabel": "가격",
+        "pricePlaceholder": "가격",
+        "button": "아이템 생성",
+        "creating": "생성 중...",
+        "success": "아이템이 성공적으로 생성되었습니다! (자동으로 리스트가 새로고침됩니다)",
+        "allFieldsRequired": "모든 필드를 입력해주세요"
+      },
+      "usersList": {
+        "title": "4. Users List (GET /api/users)",
+        "fetchButton": "사용자 불러오기",
+        "loading": "로딩 중...",
+        "total": "총: {{count}}명 사용자",
+        "active": "활성",
+        "inactive": "비활성"
+      },
+      "login": {
+        "title": "5. Login (POST /api/auth/login)",
+        "usernameLabel": "사용자명",
+        "passwordLabel": "비밀번호",
+        "button": "로그인",
+        "loggingIn": "로그인 중...",
+        "hint": "힌트: username=admin, password=admin",
+        "success": "로그인 성공! 토큰이 localStorage에 저장되었습니다"
+      },
+      "search": {
+        "title": "6. Search (GET /api/search?q=query)",
+        "placeholder": "아이템 검색...",
+        "button": "검색",
+        "searching": "검색 중...",
+        "results": "\"{{query}}\"에 대한 {{count}}개 결과를 찾았습니다"
+      },
+      "benefits": {
+        "title": "TanStack Query 장점",
+        "caching": "자동 캐싱: 데이터가 자동으로 캐시되어 불필요한 API 호출을 줄입니다",
+        "refresh": "자동 새로고침: Mutation 후 관련 쿼리가 자동으로 무효화됩니다",
+        "states": "로딩/에러 상태: isLoading, isError, isPending이 자동 관리됩니다",
+        "devtools": "DevTools: React Query DevTools로 상태를 실시간 확인할 수 있습니다",
+        "switching": "백엔드 전환: .env 파일의 VITE_API_MODE를 'real'로 변경하면 실제 백엔드로 전환됩니다"
+      }
     },
     "zustandTest": {
       "title": "Zustand 상태 관리 테스트",
-      "description": "슬라이스 패턴을 사용한 Zustand 스토어 테스트",
-      "counter": "카운터",
-      "increment": "증가",
-      "decrement": "감소",
-      "reset": "초기화"
+      "description": "모든 스토어 슬라이스의 대화형 데모: API 데이터, UI 상태, 작업 관리, 작업 전파.",
+      "apiSection": {
+        "title": "API Slice (데이터 관리)",
+        "fetchUsers": "사용자 불러오기",
+        "loading": "로딩 중...",
+        "addNewUser": "새 사용자 추가",
+        "namePlaceholder": "이름",
+        "emailPlaceholder": "이메일",
+        "add": "추가",
+        "usersCount": "사용자 ({{count}})",
+        "noUsers": "사용자가 없습니다. \"사용자 불러오기\"를 클릭하세요.",
+        "remove": "제거"
+      },
+      "uiSection": {
+        "title": "UI Slice (UI 상태)",
+        "themeControl": "테마 제어",
+        "sidebarControl": "사이드바 제어",
+        "sidebarIs": "사이드바: {{state}}",
+        "open": "열림",
+        "closed": "닫힘",
+        "language": "언어",
+        "modal": "모달",
+        "openModal": "모달 열기",
+        "modalTitle": "테스트 모달",
+        "modalContent": "이것은 Zustand 스토어의 모달 콘텐츠입니다!",
+        "notifications": "알림",
+        "info": "정보",
+        "success": "성공",
+        "warning": "경고",
+        "error": "오류",
+        "infoNotification": "정보 알림",
+        "successNotification": "성공 알림",
+        "warningNotification": "경고 알림",
+        "errorNotification": "오류 알림"
+      },
+      "taskSection": {
+        "title": "Task Slice (작업 관리)",
+        "filter": "필터",
+        "all": "전체",
+        "pending": "대기 중",
+        "inProgress": "진행 중",
+        "completed": "완료됨",
+        "cancelled": "취소됨",
+        "sortBy": "정렬 기준",
+        "created": "생성일",
+        "dueDate": "마감일",
+        "priority": "우선순위",
+        "addNewTask": "새 작업 추가",
+        "taskTitlePlaceholder": "작업 제목",
+        "low": "낮음",
+        "medium": "보통",
+        "high": "높음",
+        "addTask": "작업 추가",
+        "tasksCount": "작업 ({{count}})",
+        "noTasks": "작업이 없습니다. 위에서 추가하세요!",
+        "taskDescription": "Zustand 테스트 페이지에서 생성된 작업"
+      },
+      "workSection": {
+        "title": "작업 전파 (Props Drilling 없음)",
+        "description": "각 레벨에서 상태를 구독하는 깊은 컴포넌트 계층 - props drilling 없음!",
+        "level0": {
+          "title": "Level 0: 워크플로우 제어",
+          "subscribesTo": "구독:",
+          "workNamePlaceholder": "작업 이름 입력",
+          "simulateWork": "작업 시뮬레이션",
+          "working": "작업 중...",
+          "cancelWork": "작업 취소",
+          "clearHistory": "기록 지우기",
+          "clearLogs": "로그 지우기"
+        },
+        "level1": {
+          "title": "Level 1: 현재 작업 상태",
+          "subscribesTo": "구독:",
+          "propsReceived": "받은 Props:",
+          "none": "없음",
+          "status": "상태:",
+          "progress": "진행률",
+          "noWorkInProgress": "진행 중인 작업 없음"
+        },
+        "level2": {
+          "title": "Level 2: 최근 로그",
+          "subscribesTo": "구독:",
+          "propsReceived": "받은 Props:",
+          "none": "없음",
+          "noLogs": "아직 로그가 없습니다"
+        },
+        "level3": {
+          "title": "Level 3: 기록 개수",
+          "subscribesTo": "구독:",
+          "propsReceived": "받은 Props:",
+          "none": "없음",
+          "completedWorks": "완료된 작업"
+        },
+        "level4": {
+          "title": "Level 4: 최하위 컴포넌트",
+          "subscribesTo": "구독:",
+          "propsReceived": "받은 Props:",
+          "none": "없음",
+          "systemActive": "시스템 활성",
+          "systemIdle": "시스템 유휴"
+        },
+        "liveLogs": "실시간 로그 ({{count}})",
+        "noLogsYet": "아직 로그가 없습니다",
+        "workHistory": "작업 기록 ({{count}})",
+        "duration": "소요시간: {{time}}초"
+      }
     },
     "notFound": {
       "title": "페이지를 찾을 수 없습니다",

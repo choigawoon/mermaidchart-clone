@@ -37,21 +37,175 @@
     },
     "mswTest": {
       "title": "MSW + TanStack Query テスト",
-      "description": "Mock Service Workerを使用したAPIモッキングテスト",
-      "items": "アイテム",
-      "users": "ユーザー",
-      "createItem": "アイテム作成",
-      "createUser": "ユーザー作成",
-      "noItems": "アイテムが見つかりません",
-      "noUsers": "ユーザーが見つかりません"
+      "description": "FastAPIスタイルのモックバックエンドAPIをTanStack Queryでテストしてみてください",
+      "devToolsHint": "React Query DevToolsを開いてキャッシュと状態を確認してください！",
+      "healthCheck": {
+        "title": "1. Health Check",
+        "button": "状態確認",
+        "loading": "読み込み中..."
+      },
+      "itemsList": {
+        "title": "2. Items List (GET /api/items)",
+        "fetchButton": "アイテムを取得",
+        "loading": "読み込み中...",
+        "total": "合計: {{count}}アイテム (キャッシュデータ)",
+        "delete": "削除",
+        "deleting": "削除中..."
+      },
+      "createItem": {
+        "title": "3. Create Item (POST /api/items)",
+        "nameLabel": "名前",
+        "namePlaceholder": "商品名",
+        "descriptionLabel": "説明",
+        "descriptionPlaceholder": "商品説明",
+        "priceLabel": "価格",
+        "pricePlaceholder": "価格",
+        "button": "アイテム作成",
+        "creating": "作成中...",
+        "success": "アイテムが正常に作成されました！（リストは自動的に更新されます）",
+        "allFieldsRequired": "すべてのフィールドを入力してください"
+      },
+      "usersList": {
+        "title": "4. Users List (GET /api/users)",
+        "fetchButton": "ユーザーを取得",
+        "loading": "読み込み中...",
+        "total": "合計: {{count}}ユーザー",
+        "active": "アクティブ",
+        "inactive": "非アクティブ"
+      },
+      "login": {
+        "title": "5. Login (POST /api/auth/login)",
+        "usernameLabel": "ユーザー名",
+        "passwordLabel": "パスワード",
+        "button": "ログイン",
+        "loggingIn": "ログイン中...",
+        "hint": "ヒント: username=admin, password=admin",
+        "success": "ログイン成功！トークンがlocalStorageに保存されました"
+      },
+      "search": {
+        "title": "6. Search (GET /api/search?q=query)",
+        "placeholder": "アイテムを検索...",
+        "button": "検索",
+        "searching": "検索中...",
+        "results": "「{{query}}」で{{count}}件の結果が見つかりました"
+      },
+      "benefits": {
+        "title": "TanStack Queryの利点",
+        "caching": "自動キャッシュ: データは自動的にキャッシュされ、不要なAPI呼び出しを削減します",
+        "refresh": "自動更新: Mutation後、関連クエリが自動的に無効化されます",
+        "states": "読み込み/エラー状態: isLoading, isError, isPendingが自動管理されます",
+        "devtools": "DevTools: React Query DevToolsで状態をリアルタイムで確認できます",
+        "switching": "バックエンド切り替え: .envファイルのVITE_API_MODEを'real'に変更すると実際のバックエンドに切り替わります"
+      }
     },
     "zustandTest": {
       "title": "Zustand状態管理テスト",
-      "description": "スライスパターンを使用したZustandストアテスト",
-      "counter": "カウンター",
-      "increment": "増加",
-      "decrement": "減少",
-      "reset": "リセット"
+      "description": "すべてのストアスライスのインタラクティブデモ: APIデータ、UI状態、タスク管理、作業伝播。",
+      "apiSection": {
+        "title": "API Slice (データ管理)",
+        "fetchUsers": "ユーザーを取得",
+        "loading": "読み込み中...",
+        "addNewUser": "新しいユーザーを追加",
+        "namePlaceholder": "名前",
+        "emailPlaceholder": "メール",
+        "add": "追加",
+        "usersCount": "ユーザー ({{count}})",
+        "noUsers": "ユーザーがいません。「ユーザーを取得」をクリックしてください。",
+        "remove": "削除"
+      },
+      "uiSection": {
+        "title": "UI Slice (UI状態)",
+        "themeControl": "テーマ制御",
+        "sidebarControl": "サイドバー制御",
+        "sidebarIs": "サイドバー: {{state}}",
+        "open": "開く",
+        "closed": "閉じる",
+        "language": "言語",
+        "modal": "モーダル",
+        "openModal": "モーダルを開く",
+        "modalTitle": "テストモーダル",
+        "modalContent": "これはZustandストアからのモーダルコンテンツです！",
+        "notifications": "通知",
+        "info": "情報",
+        "success": "成功",
+        "warning": "警告",
+        "error": "エラー",
+        "infoNotification": "情報通知",
+        "successNotification": "成功通知",
+        "warningNotification": "警告通知",
+        "errorNotification": "エラー通知"
+      },
+      "taskSection": {
+        "title": "Task Slice (タスク管理)",
+        "filter": "フィルター",
+        "all": "すべて",
+        "pending": "保留中",
+        "inProgress": "進行中",
+        "completed": "完了",
+        "cancelled": "キャンセル",
+        "sortBy": "並べ替え",
+        "created": "作成日",
+        "dueDate": "期限",
+        "priority": "優先度",
+        "addNewTask": "新しいタスクを追加",
+        "taskTitlePlaceholder": "タスクタイトル",
+        "low": "低",
+        "medium": "中",
+        "high": "高",
+        "addTask": "タスク追加",
+        "tasksCount": "タスク ({{count}})",
+        "noTasks": "タスクがありません。上から追加してください！",
+        "taskDescription": "Zustandテストページから作成されたタスク"
+      },
+      "workSection": {
+        "title": "作業伝播 (Props Drillingなし)",
+        "description": "各レベルで状態をサブスクライブする深いコンポーネント階層 - props drillingなし！",
+        "level0": {
+          "title": "Level 0: ワークフロー制御",
+          "subscribesTo": "サブスクライブ:",
+          "workNamePlaceholder": "作業名を入力",
+          "simulateWork": "作業をシミュレート",
+          "working": "作業中...",
+          "cancelWork": "作業をキャンセル",
+          "clearHistory": "履歴をクリア",
+          "clearLogs": "ログをクリア"
+        },
+        "level1": {
+          "title": "Level 1: 現在の作業状態",
+          "subscribesTo": "サブスクライブ:",
+          "propsReceived": "受け取ったProps:",
+          "none": "なし",
+          "status": "状態:",
+          "progress": "進捗",
+          "noWorkInProgress": "進行中の作業はありません"
+        },
+        "level2": {
+          "title": "Level 2: 最近のログ",
+          "subscribesTo": "サブスクライブ:",
+          "propsReceived": "受け取ったProps:",
+          "none": "なし",
+          "noLogs": "まだログがありません"
+        },
+        "level3": {
+          "title": "Level 3: 履歴数",
+          "subscribesTo": "サブスクライブ:",
+          "propsReceived": "受け取ったProps:",
+          "none": "なし",
+          "completedWorks": "完了した作業"
+        },
+        "level4": {
+          "title": "Level 4: 最下層コンポーネント",
+          "subscribesTo": "サブスクライブ:",
+          "propsReceived": "受け取ったProps:",
+          "none": "なし",
+          "systemActive": "システムアクティブ",
+          "systemIdle": "システムアイドル"
+        },
+        "liveLogs": "ライブログ ({{count}})",
+        "noLogsYet": "まだログがありません",
+        "workHistory": "作業履歴 ({{count}})",
+        "duration": "所要時間: {{time}}秒"
+      }
     },
     "notFound": {
       "title": "ページが見つかりません",
