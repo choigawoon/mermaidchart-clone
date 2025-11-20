@@ -13,6 +13,9 @@ import { startMockServiceWorker } from './mocks/browser'
 import { queryClient } from '@/lib/query-client'
 import { API_CONFIG } from '@/api/config'
 
+// Initialize i18n
+import '@/lib/i18n'
+
 // Create a new router instance
 const router = createRouter({
   routeTree,

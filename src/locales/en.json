@@ -1,0 +1,96 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "submit": "Submit",
+    "refresh": "Refresh",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "mswTest": "MSW Test",
+    "zustandTest": "Zustand Test"
+  },
+  "pages": {
+    "home": {
+      "title": "Welcome",
+      "description": "This is a modern React application built with TanStack Router",
+      "getStarted": "Get Started"
+    },
+    "mswTest": {
+      "title": "MSW + TanStack Query Test",
+      "description": "Test API mocking with Mock Service Worker",
+      "items": "Items",
+      "users": "Users",
+      "createItem": "Create Item",
+      "createUser": "Create User",
+      "noItems": "No items found",
+      "noUsers": "No users found"
+    },
+    "zustandTest": {
+      "title": "Zustand State Management Test",
+      "description": "Test Zustand store with slice pattern",
+      "counter": "Counter",
+      "increment": "Increment",
+      "decrement": "Decrement",
+      "reset": "Reset"
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "The page you are looking for does not exist",
+      "goHome": "Go to Home"
+    }
+  },
+  "messages": {
+    "itemCreated": "Item created successfully",
+    "itemUpdated": "Item updated successfully",
+    "itemDeleted": "Item deleted successfully",
+    "userCreated": "User created successfully",
+    "loginSuccess": "Login successful",
+    "loginFailed": "Login failed",
+    "networkError": "Network error. Please try again.",
+    "validationError": "Please check your input",
+    "confirmDelete": "Are you sure you want to delete this item?"
+  },
+  "form": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "description": "Description",
+    "price": "Price",
+    "category": "Category",
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "minLength": "Must be at least {{min}} characters",
+    "maxLength": "Must be at most {{max}} characters"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "select": "Select Language",
+    "en": "English",
+    "ko": "Korean",
+    "ja": "Japanese"
+  }
+}
