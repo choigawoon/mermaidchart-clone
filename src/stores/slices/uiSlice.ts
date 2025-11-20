@@ -46,7 +46,7 @@ export interface Notification {
 }
 
 const initialState = {
-  isSidebarOpen: true,
+  isSidebarOpen: false,
   theme: 'system' as Theme,
   language: 'en' as Language,
   modal: { isOpen: false },

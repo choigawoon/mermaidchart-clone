@@ -10,14 +10,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { useSidebar, useUiActions } from '@/stores'
 
 export default function Header() {
   const { t } = useTranslation()
+  const isSidebarOpen = useSidebar()
+  const { setSidebarOpen } = useUiActions()
 
   return (
     <header className="p-4 flex items-center justify-between bg-gray-800 text-white shadow-lg">
       <div className="flex items-center">
-        <Sheet>
+        <Sheet open={isSidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetTrigger asChild>
             <Button
               variant="ghost"

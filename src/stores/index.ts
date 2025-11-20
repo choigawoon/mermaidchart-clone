@@ -144,6 +144,7 @@ export const useApiActions = () => useStore(
 export const useUiActions = () => useStore(
   useShallow(state => ({
     toggleSidebar: state.toggleSidebar,
+    setSidebarOpen: state.setSidebarOpen,
     setTheme: state.setTheme,
     setLanguage: state.setLanguage,
     openModal: state.openModal,
