@@ -77,6 +77,7 @@ export const useApiLoading = () => useStore(state => state.isLoading)
 
 // UI selectors
 export const useTheme = () => useStore(state => state.theme)
+export const useLanguage = () => useStore(state => state.language)
 export const useSidebar = () => useStore(state => state.isSidebarOpen)
 export const useModal = () => useStore(state => state.modal)
 export const useNotifications = () => useStore(state => state.notifications)

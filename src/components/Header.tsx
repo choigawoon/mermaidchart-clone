@@ -1,30 +1,36 @@
 import { Link } from '@tanstack/react-router'
+import { useTranslation } from 'react-i18next'
 
 import { useState } from 'react'
 import { Home, Menu, X, Database, Server } from 'lucide-react'
+import LanguageSelector from './LanguageSelector'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const { t } = useTranslation()
 
   return (
     <>
-      <header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
-        <button
-          onClick={() => setIsOpen(true)}
-          className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-          aria-label="Open menu"
-        >
-          <Menu size={24} />
-        </button>
-        <h1 className="ml-4 text-xl font-semibold">
-          <Link to="/">
-            <img
-              src="/tanstack-word-logo-white.svg"
-              alt="TanStack Logo"
-              className="h-10"
-            />
-          </Link>
-        </h1>
+      <header className="p-4 flex items-center justify-between bg-gray-800 text-white shadow-lg">
+        <div className="flex items-center">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+            aria-label="Open menu"
+          >
+            <Menu size={24} />
+          </button>
+          <h1 className="ml-4 text-xl font-semibold">
+            <Link to="/">
+              <img
+                src="/tanstack-word-logo-white.svg"
+                alt="TanStack Logo"
+                className="h-10"
+              />
+            </Link>
+          </h1>
+        </div>
+        <LanguageSelector className="text-gray-800" />
       </header>
 
       <aside
@@ -33,7 +39,7 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-bold">Navigation</h2>
+          <h2 className="text-xl font-bold">{t('nav.home')}</h2>
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
@@ -54,7 +60,7 @@ export default function Header() {
             }}
           >
             <Home size={20} />
-            <span className="font-medium">Home</span>
+            <span className="font-medium">{t('nav.home')}</span>
           </Link>
 
           {/* Demo Links Start */}
@@ -68,7 +74,7 @@ export default function Header() {
             }}
           >
             <Database size={20} />
-            <span className="font-medium">Zustand Test</span>
+            <span className="font-medium">{t('nav.zustandTest')}</span>
           </Link>
 
           <Link
@@ -81,7 +87,7 @@ export default function Header() {
             }}
           >
             <Server size={20} />
-            <span className="font-medium">MSW Test</span>
+            <span className="font-medium">{t('nav.mswTest')}</span>
           </Link>
           {/* Demo Links End */}
         </nav>

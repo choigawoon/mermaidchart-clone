@@ -2,12 +2,15 @@ import { useEffect } from 'react'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { useTranslation } from 'react-i18next'
 
 import Header from '../components/Header'
-import { useTheme } from '../stores'
+import { useTheme, useLanguage } from '../stores'
 
 function RootComponent() {
   const theme = useTheme()
+  const language = useLanguage()
+  const { i18n } = useTranslation()
 
   // Apply theme to DOM when it changes
   useEffect(() => {
@@ -25,6 +28,14 @@ function RootComponent() {
       }
     }
   }, [theme])
+
+  // Sync Zustand language state with i18n
+  useEffect(() => {
+    if (i18n.language !== language) {
+      i18n.changeLanguage(language)
+      document.documentElement.lang = language
+    }
+  }, [language, i18n])
 
   return (
     <>
