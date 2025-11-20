@@ -37,21 +37,175 @@
     },
     "mswTest": {
       "title": "MSW + TanStack Query Test",
-      "description": "Test API mocking with Mock Service Worker",
-      "items": "Items",
-      "users": "Users",
-      "createItem": "Create Item",
-      "createUser": "Create User",
-      "noItems": "No items found",
-      "noUsers": "No users found"
+      "description": "Test the mocked backend API in FastAPI style with TanStack Query",
+      "devToolsHint": "Open React Query DevTools to check caching and state!",
+      "healthCheck": {
+        "title": "1. Health Check",
+        "button": "Check Health",
+        "loading": "Loading..."
+      },
+      "itemsList": {
+        "title": "2. Items List (GET /api/items)",
+        "fetchButton": "Fetch Items",
+        "loading": "Loading...",
+        "total": "Total: {{count}} items (cached data)",
+        "delete": "Delete",
+        "deleting": "Deleting..."
+      },
+      "createItem": {
+        "title": "3. Create Item (POST /api/items)",
+        "nameLabel": "Name",
+        "namePlaceholder": "Product name",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Product description",
+        "priceLabel": "Price",
+        "pricePlaceholder": "Price",
+        "button": "Create Item",
+        "creating": "Creating...",
+        "success": "Item created successfully! (List will refresh automatically)",
+        "allFieldsRequired": "All fields are required"
+      },
+      "usersList": {
+        "title": "4. Users List (GET /api/users)",
+        "fetchButton": "Fetch Users",
+        "loading": "Loading...",
+        "total": "Total: {{count}} users",
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "login": {
+        "title": "5. Login (POST /api/auth/login)",
+        "usernameLabel": "Username",
+        "passwordLabel": "Password",
+        "button": "Login",
+        "loggingIn": "Logging in...",
+        "hint": "Hint: username=admin, password=admin",
+        "success": "Login successful! Token stored in localStorage"
+      },
+      "search": {
+        "title": "6. Search (GET /api/search?q=query)",
+        "placeholder": "Search items...",
+        "button": "Search",
+        "searching": "Searching...",
+        "results": "Found {{count}} results for \"{{query}}\""
+      },
+      "benefits": {
+        "title": "TanStack Query Benefits",
+        "caching": "Auto Caching: Data is automatically cached to reduce unnecessary API calls",
+        "refresh": "Auto Refresh: Related queries are automatically invalidated after mutations",
+        "states": "Loading/Error States: isLoading, isError, isPending are automatically managed",
+        "devtools": "DevTools: Check state in real-time with React Query DevTools",
+        "switching": "Backend Switching: Change VITE_API_MODE to 'real' in .env to switch to actual backend"
+      }
     },
     "zustandTest": {
       "title": "Zustand State Management Test",
-      "description": "Test Zustand store with slice pattern",
-      "counter": "Counter",
-      "increment": "Increment",
-      "decrement": "Decrement",
-      "reset": "Reset"
+      "description": "Interactive demonstration of all store slices: API data, UI state, task management, and work propagation.",
+      "apiSection": {
+        "title": "API Slice (Data Management)",
+        "fetchUsers": "Fetch Users",
+        "loading": "Loading...",
+        "addNewUser": "Add New User",
+        "namePlaceholder": "Name",
+        "emailPlaceholder": "Email",
+        "add": "Add",
+        "usersCount": "Users ({{count}})",
+        "noUsers": "No users. Click \"Fetch Users\" to load.",
+        "remove": "Remove"
+      },
+      "uiSection": {
+        "title": "UI Slice (UI State)",
+        "themeControl": "Theme Control",
+        "sidebarControl": "Sidebar Control",
+        "sidebarIs": "Sidebar is: {{state}}",
+        "open": "Open",
+        "closed": "Closed",
+        "language": "Language",
+        "modal": "Modal",
+        "openModal": "Open Modal",
+        "modalTitle": "Test Modal",
+        "modalContent": "This is modal content from Zustand store!",
+        "notifications": "Notifications",
+        "info": "Info",
+        "success": "Success",
+        "warning": "Warning",
+        "error": "Error",
+        "infoNotification": "Info notification",
+        "successNotification": "Success notification",
+        "warningNotification": "Warning notification",
+        "errorNotification": "Error notification"
+      },
+      "taskSection": {
+        "title": "Task Slice (Task Management)",
+        "filter": "Filter",
+        "all": "all",
+        "pending": "pending",
+        "inProgress": "in progress",
+        "completed": "completed",
+        "cancelled": "cancelled",
+        "sortBy": "Sort By",
+        "created": "Created",
+        "dueDate": "Due Date",
+        "priority": "Priority",
+        "addNewTask": "Add New Task",
+        "taskTitlePlaceholder": "Task title",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "addTask": "Add Task",
+        "tasksCount": "Tasks ({{count}})",
+        "noTasks": "No tasks. Add one above!",
+        "taskDescription": "Task created from Zustand test page"
+      },
+      "workSection": {
+        "title": "Work Propagation (No Props Drilling)",
+        "description": "Deep component hierarchy with state subscription at each level - no props drilling!",
+        "level0": {
+          "title": "Level 0: Workflow Controls",
+          "subscribesTo": "Subscribes to:",
+          "workNamePlaceholder": "Enter work name",
+          "simulateWork": "Simulate Work",
+          "working": "Working...",
+          "cancelWork": "Cancel Work",
+          "clearHistory": "Clear History",
+          "clearLogs": "Clear Logs"
+        },
+        "level1": {
+          "title": "Level 1: Current Work Status",
+          "subscribesTo": "Subscribes to:",
+          "propsReceived": "Props received:",
+          "none": "NONE",
+          "status": "Status:",
+          "progress": "Progress",
+          "noWorkInProgress": "No work in progress"
+        },
+        "level2": {
+          "title": "Level 2: Recent Logs",
+          "subscribesTo": "Subscribes to:",
+          "propsReceived": "Props received:",
+          "none": "NONE",
+          "noLogs": "No logs yet"
+        },
+        "level3": {
+          "title": "Level 3: History Count",
+          "subscribesTo": "Subscribes to:",
+          "propsReceived": "Props received:",
+          "none": "NONE",
+          "completedWorks": "completed works"
+        },
+        "level4": {
+          "title": "Level 4: Deepest Component",
+          "subscribesTo": "Subscribes to:",
+          "propsReceived": "Props received:",
+          "none": "NONE",
+          "systemActive": "System Active",
+          "systemIdle": "System Idle"
+        },
+        "liveLogs": "Live Logs ({{count}})",
+        "noLogsYet": "No logs yet",
+        "workHistory": "Work History ({{count}})",
+        "duration": "Duration: {{time}}s"
+      }
     },
     "notFound": {
       "title": "Page Not Found",
