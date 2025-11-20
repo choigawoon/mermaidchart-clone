@@ -246,5 +246,31 @@
     "en": "영어",
     "ko": "한국어",
     "ja": "일본어"
+  },
+  "plurals": {
+    "item_one": "{{count}}개 아이템",
+    "item_other": "{{count}}개 아이템",
+    "user_one": "{{count}}명 사용자",
+    "user_other": "{{count}}명 사용자",
+    "task_one": "{{count}}개 작업",
+    "task_other": "{{count}}개 작업",
+    "result_one": "{{count}}개 결과를 찾았습니다",
+    "result_other": "{{count}}개 결과를 찾았습니다",
+    "minute_one": "{{count}}분",
+    "minute_other": "{{count}}분",
+    "hour_one": "{{count}}시간",
+    "hour_other": "{{count}}시간",
+    "day_one": "{{count}}일",
+    "day_other": "{{count}}일"
+  },
+  "format": {
+    "dateShort": "{{date, dateShort}}",
+    "dateLong": "{{date, dateLong}}",
+    "time": "{{date, time}}",
+    "dateTime": "{{date, dateTime}}",
+    "relativeTime": "{{date, relativeTime}}",
+    "number": "{{value, number}}",
+    "currency": "{{value, currency}}",
+    "percent": "{{value, percent}}"
   }
 }

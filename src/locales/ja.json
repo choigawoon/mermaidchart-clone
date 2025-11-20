@@ -246,5 +246,31 @@
     "en": "英語",
     "ko": "韓国語",
     "ja": "日本語"
+  },
+  "plurals": {
+    "item_one": "{{count}}アイテム",
+    "item_other": "{{count}}アイテム",
+    "user_one": "{{count}}ユーザー",
+    "user_other": "{{count}}ユーザー",
+    "task_one": "{{count}}タスク",
+    "task_other": "{{count}}タスク",
+    "result_one": "{{count}}件の結果が見つかりました",
+    "result_other": "{{count}}件の結果が見つかりました",
+    "minute_one": "{{count}}分",
+    "minute_other": "{{count}}分",
+    "hour_one": "{{count}}時間",
+    "hour_other": "{{count}}時間",
+    "day_one": "{{count}}日",
+    "day_other": "{{count}}日"
+  },
+  "format": {
+    "dateShort": "{{date, dateShort}}",
+    "dateLong": "{{date, dateLong}}",
+    "time": "{{date, time}}",
+    "dateTime": "{{date, dateTime}}",
+    "relativeTime": "{{date, relativeTime}}",
+    "number": "{{value, number}}",
+    "currency": "{{value, currency}}",
+    "percent": "{{value, percent}}"
   }
 }

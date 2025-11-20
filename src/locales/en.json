@@ -246,5 +246,31 @@
     "en": "English",
     "ko": "Korean",
     "ja": "Japanese"
+  },
+  "plurals": {
+    "item_one": "{{count}} item",
+    "item_other": "{{count}} items",
+    "user_one": "{{count}} user",
+    "user_other": "{{count}} users",
+    "task_one": "{{count}} task",
+    "task_other": "{{count}} tasks",
+    "result_one": "{{count}} result found",
+    "result_other": "{{count}} results found",
+    "minute_one": "{{count}} minute",
+    "minute_other": "{{count}} minutes",
+    "hour_one": "{{count}} hour",
+    "hour_other": "{{count}} hours",
+    "day_one": "{{count}} day",
+    "day_other": "{{count}} days"
+  },
+  "format": {
+    "dateShort": "{{date, dateShort}}",
+    "dateLong": "{{date, dateLong}}",
+    "time": "{{date, time}}",
+    "dateTime": "{{date, dateTime}}",
+    "relativeTime": "{{date, relativeTime}}",
+    "number": "{{value, number}}",
+    "currency": "{{value, currency}}",
+    "percent": "{{value, percent}}"
   }
 }
