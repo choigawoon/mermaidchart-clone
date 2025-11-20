@@ -18,10 +18,13 @@
 8. [State Management](#state-management)
 9. [Data Fetching & API Layer](#data-fetching--api-layer)
 10. [API Mocking with MSW](#api-mocking-with-msw)
-11. [Schema Validation with Zod](#schema-validation-with-zod)
-12. [Testing](#testing)
-13. [Common Tasks](#common-tasks)
-14. [Important Notes for AI Assistants](#important-notes-for-ai-assistants)
+11. [IndexedDB with Dexie](#indexeddb-with-dexie)
+12. [Schema Validation with Zod](#schema-validation-with-zod)
+13. [Internationalization (i18n)](#internationalization-i18n)
+14. [PWA Support](#pwa-support)
+15. [Testing](#testing)
+16. [Common Tasks](#common-tasks)
+17. [Important Notes for AI Assistants](#important-notes-for-ai-assistants)
 
 ---
 
@@ -35,16 +38,19 @@ This is a modern React application built with TanStack Router, featuring:
 - **State management** with Zustand (slice pattern)
 - **Data fetching** with TanStack Query
 - **API mocking** with MSW (Mock Service Worker)
+- **Persistent mock DB** with IndexedDB (Dexie)
 - **Schema validation** with Zod
+- **Internationalization** with i18next (en, ko, ja)
+- **PWA support** with offline capability
 - **Development tooling** with Vite for fast HMR
 - **Strict TypeScript** configuration for type safety
 
 ### Project Status
 
-- **Current Branch**: `claude/claude-md-mi7g0dgho4blc3b7-01SymnBd9oUjixnUYxNjpGRF`
+- **Current Branch**: `claude/claude-md-mi7l5ydscdhl78fr-01D9vaQmAhRnKde3E1EdZUji`
 - **Git Status**: Clean (no uncommitted changes)
-- **Last Commit**: `4d537bf - 빌드 배포해도 msw로 동작하게끔 수정`
-- **Production Ready**: Development environment with full MSW mocking support
+- **Last Commit**: `4e73c96 - Merge pull request #18 (IndexedDB mock DB)`
+- **Production Ready**: Development environment with full MSW + IndexedDB mocking support
 
 ---
 
@@ -64,7 +70,10 @@ This is a modern React application built with TanStack Router, featuring:
 | **UI Components** | shadcn/ui | latest | Pre-built component system |
 | **Icons** | Lucide React | 0.544.0 | Modern icon library |
 | **API Mocking** | MSW | 2.12.2 | Mock Service Worker for API mocking |
+| **Mock Database** | Dexie | 4.2.1 | IndexedDB wrapper for persistent mock data |
 | **Validation** | Zod | 4.1.12 | Schema validation & type inference |
+| **i18n** | i18next | 25.6.3 | Internationalization framework |
+| **PWA** | vite-plugin-pwa | 1.1.0 | Progressive Web App support |
 | **Testing** | Vitest | 3.0.5 | Unit test framework |
 
 ### Key Utilities
@@ -74,9 +83,22 @@ This is a modern React application built with TanStack Router, featuring:
 - **class-variance-authority** (0.7.1) - Component variant management
 - **tw-animate-css** (1.3.6) - Animation utilities
 - **web-vitals** (5.1.0) - Performance monitoring
+- **react-i18next** (16.3.5) - React bindings for i18next
+- **i18next-browser-languagedetector** (8.2.0) - Auto language detection
+- **workbox-window** (7.4.0) - Service worker management
+
+### Radix UI Primitives
+
+- **@radix-ui/react-dialog** (1.1.15)
+- **@radix-ui/react-label** (2.1.8)
+- **@radix-ui/react-progress** (1.1.8)
+- **@radix-ui/react-select** (2.2.6)
+- **@radix-ui/react-separator** (1.1.8)
+- **@radix-ui/react-slot** (1.2.4)
 
 ### Development Tools
 
+- **@tanstack/devtools-vite** (0.3.11) - Integrated devtools
 - **@tanstack/react-devtools** - Global debugging panel
 - **@tanstack/react-router-devtools** - Router state inspection
 - **@tanstack/react-query-devtools** - Query state inspection
@@ -114,76 +136,55 @@ yarn install # Wrong package manager
 │   │       ├── search.ts       # Search hook
 │   │       └── health.ts       # Health check hook
 │   ├── components/              # React components
-│   │   └── Header.tsx          # Navigation header (mobile sidebar)
+│   │   ├── Header.tsx          # Navigation header (mobile sidebar)
+│   │   ├── LanguageSelector.tsx # Language switcher component
+│   │   ├── PWAPrompt.tsx       # PWA install/update prompts
+│   │   └── ui/                 # shadcn/ui components
+│   │       ├── alert.tsx, badge.tsx, button.tsx, card.tsx
+│   │       ├── dialog.tsx, input.tsx, label.tsx, progress.tsx
+│   │       ├── select.tsx, separator.tsx, sheet.tsx
+│   ├── db/                      # IndexedDB database
+│   │   └── index.ts            # Dexie setup, entities, seed data
+│   ├── hooks/                   # Custom React hooks
+│   │   ├── index.ts            # Re-exports
+│   │   └── usePWA.ts           # PWA installation & update hook
 │   ├── lib/                     # Utility functions
 │   │   ├── utils.ts            # cn() helper for class merging
-│   │   └── query-client.ts     # TanStack Query client config
+│   │   ├── query-client.ts     # TanStack Query client config
+│   │   └── i18n.ts             # i18next configuration
+│   ├── locales/                 # Translation files
+│   │   ├── index.ts, en.json, ko.json, ja.json
 │   ├── mocks/                   # MSW mock handlers
 │   │   ├── browser.ts          # MSW browser setup
-│   │   ├── handlers.ts         # API route handlers
+│   │   ├── handlers.ts         # API route handlers (uses IndexedDB)
 │   │   └── schemas.ts          # Re-exports from src/schemas
-│   ├── schemas/                  # Zod schema definitions
+│   ├── schemas/                 # Zod schema definitions
 │   │   ├── api/                # API request/response schemas
-│   │   │   ├── item.ts        # Item API schemas
-│   │   │   ├── user.ts        # User API schemas
-│   │   │   ├── auth.ts        # Auth API schemas
-│   │   │   ├── common.ts      # Common schemas (errors, pagination)
-│   │   │   └── index.ts       # Re-exports
 │   │   ├── models/             # DB model schemas (mirrors Prisma)
-│   │   │   ├── item.ts        # Item model
-│   │   │   ├── user.ts        # User model
-│   │   │   └── index.ts       # Re-exports
 │   │   └── index.ts            # Main entry point
 │   ├── routes/                  # File-based routing (TanStack Router)
-│   │   ├── __root.tsx          # Root layout (persistent across routes)
+│   │   ├── __root.tsx          # Root layout
 │   │   ├── index.tsx           # Home page (/)
 │   │   ├── zustand-test.tsx    # Zustand test page
 │   │   ├── msw-test.tsx        # MSW + TanStack Query test page
 │   │   └── routeTree.gen.ts    # AUTO-GENERATED - DO NOT EDIT
 │   ├── stores/                  # Zustand state management
-│   │   ├── slices/             # Store slices (modular state)
-│   │   │   ├── apiSlice.ts    # API data management
-│   │   │   ├── uiSlice.ts     # UI state management
-│   │   │   ├── taskSlice.ts   # Task management
-│   │   │   └── workflowSlice.ts # Workflow/progress tracking
+│   │   ├── slices/             # apiSlice, uiSlice, taskSlice, workflowSlice
 │   │   └── index.ts            # Combined store with middleware
+│   ├── test/                    # Test utilities
+│   │   ├── setup.ts            # Vitest setup
+│   │   └── i18n-test-utils.tsx # i18n testing helpers
 │   ├── main.tsx                # App entry point
 │   ├── styles.css              # Global styles + Tailwind config
-│   ├── reportWebVitals.ts      # Performance monitoring
-│   └── logo.svg                # React logo
-├── public/                       # Static assets (served as-is)
-│   ├── mockServiceWorker.js    # MSW service worker
-│   ├── favicon.ico
-│   ├── manifest.json           # PWA manifest
-│   └── robots.txt
-├── prisma/                       # Prisma configuration
-│   └── schema.prisma           # Database schema (source of truth)
-├── .env.example                 # Environment variables template
-├── API_INTEGRATION.md           # API integration documentation
-├── BACKEND_ROADMAP.md          # Backend development roadmap
-├── FEATURES_ROADMAP.md         # Feature development roadmap
-├── SERVICE_ARCHITECTURE.md     # Service architecture documentation
-├── package.json                # Dependencies & scripts
-├── pnpm-lock.yaml              # Lock file (commit this)
-├── tsconfig.json               # TypeScript config
-├── vite.config.ts              # Vite build config
-├── components.json             # shadcn/ui config
-└── index.html                  # HTML entry point
+│   └── vite-env.d.ts           # Vite type definitions
+├── public/                      # Static assets
+│   ├── mockServiceWorker.js, favicon.ico
+│   ├── logo192.png, logo512.png # PWA icons
+│   └── manifest.json           # PWA manifest
+├── prisma/schema.prisma        # Database schema (source of truth)
+├── vite.config.ts              # Vite build config (includes PWA)
+└── package.json                # Dependencies & scripts
 ```
-
-### Key File Locations
-
-- **API Services**: `src/api/services/*.ts` (TanStack Query hooks)
-- **API Client**: `src/api/client.ts` (fetch wrapper)
-- **Mock Handlers**: `src/mocks/handlers.ts` (MSW routes)
-- **Schemas (API)**: `src/schemas/api/*.ts` (request/response schemas)
-- **Schemas (Models)**: `src/schemas/models/*.ts` (DB entity schemas)
-- **Prisma Schema**: `prisma/schema.prisma` (database models)
-- **Components**: `src/components/*.tsx`
-- **Routes**: `src/routes/*.tsx` (auto-discovered)
-- **Stores**: `src/stores/` (Zustand state management)
-- **Utilities**: `src/lib/*.ts`
-- **Styles**: `src/styles.css` (global CSS + Tailwind)
 
 ---
 
@@ -191,1119 +192,181 @@ yarn install # Wrong package manager
 
 ### Environment Configuration
 
-Create a `.env` file from the template:
-
 ```bash
 cp .env.example .env
 ```
 
 **Environment Variables**:
 ```bash
-# API Mode: 'mock' uses MSW, 'real' uses actual backend
-VITE_API_MODE=mock
-
-# Backend API URL (used when VITE_API_MODE=real)
+VITE_API_MODE=mock              # 'mock' or 'real'
 VITE_API_BASE_URL=http://localhost:8000
-
-# Feature Flags
 VITE_ENABLE_DEVTOOLS=true
-```
-
-### Starting Development
-
-```bash
-# 1. Install dependencies (if not already done)
-pnpm install
-
-# 2. Start dev server on http://localhost:3000
-pnpm dev
-
-# 3. Run tests
-pnpm test
-
-# 4. Build for production
-pnpm build
-
-# 5. Preview production build
-pnpm serve
 ```
 
 ### Available Scripts
 
-| Command | Purpose | Details |
-|---------|---------|---------|
-| `pnpm dev` | Start dev server | Port 3000, HMR enabled, MSW active |
-| `pnpm build` | Production build | Runs `vite build && tsc` |
-| `pnpm serve` | Preview build | Serves `dist/` on port 4173 |
-| `pnpm test` | Run tests | Executes Vitest test suite |
-
-### Development Server Features
-
-- **Hot Module Replacement (HMR)**: Instant updates without page refresh
-- **TanStack DevTools**: Open browser to see debugging panels
-- **React Query DevTools**: Inspect query state and cache
-- **MSW Console**: Logs mock API requests in console
-- **React StrictMode**: Enabled in development for warnings
-
-### Test Pages
-
-- `/` - Home page
-- `/zustand-test` - Interactive Zustand store demos
-- `/msw-test` - TanStack Query + MSW API demos
+| Command | Purpose |
+|---------|---------|
+| `pnpm dev` | Start dev server (port 3000) |
+| `pnpm build` | Production build |
+| `pnpm serve` | Preview production build |
+| `pnpm test` | Run tests |
 
 ---
 
-## Code Conventions
+## Internationalization (i18n)
 
-### TypeScript Configuration
+### Overview
 
-**Strict Mode Enabled** - All code must be type-safe:
+Supports **English (en)**, **Korean (ko)**, and **Japanese (ja)** using i18next.
 
-```json
-{
-  "strict": true,
-  "noUnusedLocals": true,
-  "noUnusedParameters": true,
-  "noFallthroughCasesInSwitch": true,
-  "noUncheckedSideEffectImports": true
-}
-```
-
-**Path Aliases**:
-```typescript
-// Use @ alias for src imports
-import { cn } from '@/lib/utils'
-import Header from '@/components/Header'
-import { useItems } from '@/api/services'
-
-// NOT:
-import { cn } from '../lib/utils'  // Avoid relative imports
-```
-
-### Component Patterns
-
-#### 1. Functional Components (Recommended)
+### Usage
 
 ```tsx
-// Good: Arrow function component
+import { useTranslation } from 'react-i18next'
+
 export const MyComponent = () => {
-  return <div>Content</div>
-}
-
-// Also Good: Named function component
-export function MyComponent() {
-  return <div>Content</div>
+  const { t } = useTranslation()
+  return <h1>{t('page.title')}</h1>
 }
 ```
 
-#### 2. React Hooks
+### Changing Language
 
 ```tsx
-import { useState } from 'react'
+import { useLanguage, useUiActions } from '@/stores'
 
-export const Counter = () => {
-  const [count, setCount] = useState(0)
-
-  return (
-    <button onClick={() => setCount(count + 1)}>
-      Count: {count}
-    </button>
-  )
-}
+const { setLanguage } = useUiActions()
+setLanguage('ko') // Syncs with i18next automatically
 ```
 
-#### 3. Component File Naming
+### Translation Files
 
-- **Components**: PascalCase (e.g., `Header.tsx`, `UserProfile.tsx`)
-- **Utilities**: camelCase (e.g., `utils.ts`, `apiHelpers.ts`)
-- **Routes**: lowercase/kebab-case (e.g., `index.tsx`, `msw-test.tsx`)
-- **Services**: camelCase (e.g., `items.ts`, `auth.ts`)
-
-### Import Order Convention
-
-```tsx
-// 1. React imports
-import { useState } from 'react'
-
-// 2. Third-party libraries
-import { Link } from '@tanstack/react-router'
-import { useMutation } from '@tanstack/react-query'
-import { Menu, X } from 'lucide-react'
-
-// 3. Internal utilities
-import { cn } from '@/lib/utils'
-import { apiClient } from '@/api/client'
-
-// 4. API services
-import { useItems, useCreateItem } from '@/api/services'
-
-// 5. Stores
-import { useStore } from '@/stores'
-
-// 6. Components
-import Header from '@/components/Header'
-
-// 7. Types
-import type { Item } from '@/mocks/schemas'
-```
+Located in `src/locales/`:
+- `en.json` - English
+- `ko.json` - Korean
+- `ja.json` - Japanese
 
 ---
 
-## Styling Guidelines
+## IndexedDB with Dexie
 
-### Tailwind CSS v4 Approach
+### Overview
 
-This project uses **Tailwind CSS v4** with CSS variables for theming.
+Uses **Dexie.js** for persistent mock data storage in IndexedDB.
 
-#### 1. Inline Utility Classes (Primary Method)
-
-```tsx
-// Preferred: Tailwind utilities directly in JSX
-export const Button = () => {
-  return (
-    <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90">
-      Click Me
-    </button>
-  )
-}
-```
-
-#### 2. Conditional Classes with `cn()` Utility
+### Database Setup
 
 ```tsx
-import { cn } from '@/lib/utils'
+// src/db/index.ts
+import { db, initializeDatabase, resetDatabase } from '@/db'
 
-export const Button = ({ variant, className }: ButtonProps) => {
-  return (
-    <button
-      className={cn(
-        "px-4 py-2 rounded-lg", // Base styles
-        variant === "primary" && "bg-primary text-white",
-        variant === "secondary" && "bg-secondary text-foreground",
-        className // Allow override
-      )}
-    >
-      Click Me
-    </button>
-  )
-}
+// Query
+const items = await db.items.toArray()
+const item = await db.items.get(1)
+
+// Create
+const id = await db.items.add({ name: 'New Item', ... })
+
+// Update
+await db.items.put({ id: 1, ...updatedData })
+
+// Delete
+await db.items.delete(1)
+
+// Reset to seed data
+await resetDatabase()
 ```
 
-#### 3. Component Variants with CVA
+### Tables
 
-```tsx
-import { cva } from 'class-variance-authority'
-
-const buttonVariants = cva(
-  "px-4 py-2 rounded-lg", // Base styles
-  {
-    variants: {
-      variant: {
-        primary: "bg-primary text-white",
-        secondary: "bg-secondary text-foreground",
-      },
-      size: {
-        sm: "text-sm px-3 py-1",
-        lg: "text-lg px-6 py-3",
-      }
-    },
-    defaultVariants: {
-      variant: "primary",
-      size: "md"
-    }
-  }
-)
-```
-
-### Theme Colors (CSS Variables)
-
-Available in both light and dark modes:
-
-```css
-/* Semantic colors */
---background, --foreground
---card, --card-foreground
---primary, --primary-foreground
---secondary, --secondary-foreground
---muted, --muted-foreground
---accent, --accent-foreground
---destructive, --destructive-foreground
-
-/* UI elements */
---border, --input, --ring
-
-/* Chart colors */
---chart-1 through --chart-5
-
-/* Border radius */
---radius-sm, --radius-md, --radius-lg, --radius-xl
-```
-
-**Usage in Tailwind**:
-```tsx
-<div className="bg-background text-foreground border-border rounded-lg">
-  <p className="text-muted-foreground">Muted text</p>
-  <button className="bg-primary text-primary-foreground">Primary Button</button>
-</div>
-```
-
-### Dark Mode
-
-Toggle dark mode by adding `.dark` class to `<html>` (handled automatically by root layout):
-
-```tsx
-// Use the UI actions from Zustand
-const { setTheme } = useUiActions()
-
-setTheme('dark')   // Enable dark mode
-setTheme('light')  // Enable light mode
-setTheme('system') // Follow system preference
-```
-
-### Adding shadcn/ui Components
-
-```bash
-# Install new components
-pnpx shadcn@latest add button
-pnpx shadcn@latest add card
-pnpx shadcn@latest add dialog
-
-# Components will be added to src/components/ui/
-```
+- **items**: id, name, description, price, category, created_at, updated_at
+- **users**: id, email, username, full_name, is_active, created_at
 
 ---
 
-## Routing Patterns
+## PWA Support
 
-### File-Based Routing
+### Overview
 
-TanStack Router uses **file-based routing** - routes are defined by files in `src/routes/`.
+Progressive Web App with offline capability using vite-plugin-pwa.
 
-#### Route File Structure
-
-| File Path | Route URL | Description |
-|-----------|-----------|-------------|
-| `index.tsx` | `/` | Home page |
-| `zustand-test.tsx` | `/zustand-test` | Zustand test page |
-| `msw-test.tsx` | `/msw-test` | MSW + Query test page |
-| `blog.$id.tsx` | `/blog/:id` | Dynamic blog post |
-| `__root.tsx` | N/A | Root layout (persistent) |
-
-#### Creating a New Route
-
-**Step 1**: Create file in `src/routes/`
-
-```bash
-touch src/routes/about.tsx
-```
-
-**Step 2**: Define route component
+### usePWA Hook
 
 ```tsx
-// src/routes/about.tsx
-import { createFileRoute } from '@tanstack/react-router'
+import { usePWA } from '@/hooks/usePWA'
 
-export const Route = createFileRoute('/about')({
-  component: AboutPage
-})
-
-function AboutPage() {
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">About Us</h1>
-      <p>This is the about page</p>
-    </div>
-  )
-}
+const {
+  canInstall,      // Can show install prompt
+  installPrompt,   // Trigger install
+  needRefresh,     // Update available
+  updateServiceWorker, // Apply update
+  isOnline,        // Network status
+} = usePWA()
 ```
 
-**Step 3**: Route is automatically registered (via `routeTree.gen.ts`)
+### PWAPrompt Component
 
-**IMPORTANT**:
-- Do NOT manually edit `src/routes/routeTree.gen.ts` (auto-generated)
-- Vite plugin automatically updates route tree on file changes
-
-### Navigation with Link Component
-
-```tsx
-import { Link } from '@tanstack/react-router'
-
-export const Navigation = () => {
-  return (
-    <nav>
-      <Link to="/">Home</Link>
-      <Link to="/msw-test">MSW Test</Link>
-
-      {/* Active link styling */}
-      <Link
-        to="/zustand-test"
-        activeProps={{ className: 'text-primary font-bold' }}
-      >
-        Zustand Test
-      </Link>
-
-      {/* Dynamic routes */}
-      <Link to="/blog/$id" params={{ id: '123' }}>
-        Blog Post 123
-      </Link>
-    </nav>
-  )
-}
-```
-
-### Root Layout (`__root.tsx`)
-
-The root layout wraps ALL routes and persists across navigation:
-
-```tsx
-// src/routes/__root.tsx
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import Header from '@/components/Header'
-import { useTheme } from '@/stores'
-
-function RootComponent() {
-  const theme = useTheme()
-
-  // Apply theme to DOM
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [theme])
-
-  return (
-    <>
-      <Header />
-      <Outlet />
-      <TanStackDevtools />
-    </>
-  )
-}
-
-export const Route = createRootRoute({
-  component: RootComponent,
-})
-```
-
-### Programmatic Navigation
-
-```tsx
-import { useNavigate } from '@tanstack/react-router'
-
-export const LoginForm = () => {
-  const navigate = useNavigate()
-
-  const handleLogin = async () => {
-    // ... login logic
-    navigate({ to: '/dashboard' })
-  }
-
-  return <button onClick={handleLogin}>Login</button>
-}
-```
+Included in root layout, provides UI for:
+- Install prompts
+- Update notifications
+- Offline indicator
 
 ---
 
 ## State Management
 
-### Current Setup: Zustand with Slice Pattern
+### Zustand Slices
 
-This project uses **Zustand** for global state management with a modular slice pattern.
+- **apiSlice** - API data (users, posts)
+- **uiSlice** - UI state (theme, language, sidebar, modals)
+- **taskSlice** - Task management
+- **workflowSlice** - Progress tracking
 
-#### Store Architecture
-
-```
-src/stores/
-├── slices/
-│   ├── apiSlice.ts      # API data management (users, posts)
-│   ├── uiSlice.ts       # UI state (theme, sidebar, modals)
-│   ├── taskSlice.ts     # Task management (CRUD, filtering)
-│   └── workflowSlice.ts # Workflow progress tracking
-└── index.ts             # Combined store with middleware
-```
-
-### Basic Usage
+### Usage
 
 ```tsx
-import { useStore } from '@/stores'
+import { useTheme, useLanguage, useUiActions } from '@/stores'
 
-export const MyComponent = () => {
-  // Use specific state (recommended for performance)
-  const users = useStore(state => state.users)
-  const theme = useStore(state => state.theme)
-
-  // Use actions
-  const addTask = useStore(state => state.addTask)
-
-  return <div>...</div>
-}
+const theme = useTheme()
+const language = useLanguage()
+const { setTheme, setLanguage } = useUiActions()
 ```
-
-### Selector Hooks (Recommended)
-
-Use pre-built selector hooks for better performance:
-
-```tsx
-import {
-  useUsers, useTheme, useTasks,
-  useApiActions, useUiActions, useTaskActions, useWorkflowActions
-} from '@/stores'
-
-export const MyComponent = () => {
-  // State selectors
-  const users = useUsers()
-  const theme = useTheme()
-  const tasks = useTasks()
-
-  // Action selectors
-  const { fetchUsers, addUser } = useApiActions()
-  const { setTheme, addNotification } = useUiActions()
-
-  return <div>...</div>
-}
-```
-
-### Store Slices
-
-#### 1. API Slice (Data Management)
-
-```tsx
-import { useApiActions, useUsers } from '@/stores'
-
-export const UserList = () => {
-  const users = useUsers()
-  const { fetchUsers, addUser, removeUser } = useApiActions()
-
-  return (
-    <div>
-      <button onClick={fetchUsers}>Fetch Users</button>
-      {users.map(user => (
-        <div key={user.id}>{user.name}</div>
-      ))}
-    </div>
-  )
-}
-```
-
-#### 2. UI Slice (UI State)
-
-```tsx
-import { useTheme, useUiActions } from '@/stores'
-
-export const ThemeToggle = () => {
-  const theme = useTheme()
-  const { setTheme, addNotification } = useUiActions()
-
-  return (
-    <div>
-      <button onClick={() => setTheme('dark')}>Dark Mode</button>
-      <button onClick={() => addNotification('Hello!', 'success')}>
-        Notify
-      </button>
-    </div>
-  )
-}
-```
-
-#### 3. Task Slice (Task Management)
-
-```tsx
-import { useTasks, useTaskActions } from '@/stores'
-
-export const TaskList = () => {
-  const tasks = useTasks() // Already filtered and sorted
-  const { addTask, deleteTask, setFilter } = useTaskActions()
-
-  return (
-    <div>
-      <button onClick={() => setFilter('completed')}>Show Completed</button>
-      {tasks.map(task => (
-        <div key={task.id}>{task.title}</div>
-      ))}
-    </div>
-  )
-}
-```
-
-#### 4. Workflow Slice (Progress Tracking)
-
-```tsx
-import {
-  useCurrentWork, useWorkHistory, useWorkLogs,
-  useIsWorkInProgress, useWorkflowActions
-} from '@/stores'
-
-export const WorkflowDemo = () => {
-  const currentWork = useCurrentWork()
-  const workHistory = useWorkHistory()
-  const isWorking = useIsWorkInProgress()
-  const { simulateWork, clearHistory } = useWorkflowActions()
-
-  return (
-    <div>
-      <button
-        onClick={() => simulateWork('Build Project', 3000)}
-        disabled={isWorking}
-      >
-        Start Work
-      </button>
-      {currentWork && (
-        <div>
-          <p>{currentWork.name}: {currentWork.progress}%</p>
-        </div>
-      )}
-    </div>
-  )
-}
-```
-
-### Middleware
-
-The store uses two Zustand middleware:
-
-#### 1. DevTools (Development Only)
-
-Redux DevTools integration for debugging - automatically enabled in development.
-
-#### 2. Persist
-
-LocalStorage persistence for UI preferences:
-- theme
-- language
-- isSidebarOpen
-
----
-
-## Data Fetching & API Layer
-
-### TanStack Query Integration
-
-This project uses **TanStack Query** for all server state management.
-
-#### Query Client Configuration
-
-```tsx
-// src/lib/query-client.ts
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-      staleTime: 5 * 60 * 1000,  // 5 minutes
-      gcTime: 10 * 60 * 1000,    // 10 minutes
-    },
-    mutations: {
-      retry: 0,
-    },
-  },
-})
-```
-
-### API Client
-
-The API client (`src/api/client.ts`) provides a unified fetch wrapper:
-
-```tsx
-import { apiClient } from '@/api/client'
-
-// GET request
-const data = await apiClient.get<ItemsResponse>('/api/items', {
-  params: { skip: 0, limit: 10 }
-})
-
-// POST request
-const newItem = await apiClient.post<Item>('/api/items', {
-  name: 'New Item',
-  price: 100
-})
-
-// PUT request
-const updated = await apiClient.put<Item>('/api/items/1', {
-  name: 'Updated'
-})
-
-// DELETE request
-await apiClient.delete<{ message: string }>('/api/items/1')
-```
-
-### API Services Pattern
-
-Each resource has its own service file with TanStack Query hooks:
-
-```tsx
-// src/api/services/items.ts
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { apiClient } from '@/api/client'
-
-// Query keys for cache management
-export const itemsKeys = {
-  all: ['items'] as const,
-  lists: () => [...itemsKeys.all, 'list'] as const,
-  list: (params) => [...itemsKeys.lists(), params] as const,
-  detail: (id: number) => [...itemsKeys.all, 'detail', id] as const,
-}
-
-// Fetch items list
-export const useItems = (params?: { skip?: number; limit?: number }) => {
-  return useQuery({
-    queryKey: itemsKeys.list(params),
-    queryFn: () => apiClient.get<ItemsListResponse>('/api/items', { params }),
-  })
-}
-
-// Create item with cache invalidation
-export const useCreateItem = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: (data: ItemCreate) => apiClient.post<Item>('/api/items', data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: itemsKeys.lists() })
-    },
-  })
-}
-```
-
-### Using API Hooks in Components
-
-```tsx
-import { useItems, useCreateItem, useDeleteItem } from '@/api/services'
-
-export const ItemsPage = () => {
-  const { data, isLoading, error, refetch } = useItems()
-  const createMutation = useCreateItem()
-  const deleteMutation = useDeleteItem()
-
-  if (isLoading) return <div>Loading...</div>
-  if (error) return <div>Error: {error.message}</div>
-
-  return (
-    <div>
-      <button onClick={() => refetch()}>Refresh</button>
-
-      {data?.items.map(item => (
-        <div key={item.id}>
-          <span>{item.name}</span>
-          <button
-            onClick={() => deleteMutation.mutate(item.id)}
-            disabled={deleteMutation.isPending}
-          >
-            Delete
-          </button>
-        </div>
-      ))}
-
-      <button
-        onClick={() => createMutation.mutate({ name: 'New', price: 100 })}
-        disabled={createMutation.isPending}
-      >
-        {createMutation.isPending ? 'Creating...' : 'Create Item'}
-      </button>
-    </div>
-  )
-}
-```
-
-### Available API Services
-
-| Service | Hooks | Endpoints |
-|---------|-------|-----------|
-| **items.ts** | `useItems`, `useItem`, `useCreateItem`, `useUpdateItem`, `useDeleteItem` | `/api/items` |
-| **users.ts** | `useUsers`, `useUser`, `useCreateUser` | `/api/users` |
-| **auth.ts** | `useLogin` | `/api/auth/login` |
-| **search.ts** | `useSearch` | `/api/search` |
-| **health.ts** | `useHealthCheck` | `/api/health` |
 
 ---
 
 ## API Mocking with MSW
 
-### Overview
+Uses MSW + IndexedDB for persistent mock API. Data survives page reloads.
 
-This project uses **MSW (Mock Service Worker)** to mock backend APIs during development and production builds. This allows frontend development without a real backend.
-
-### Configuration
-
-**API Mode** is controlled by environment variable:
-
-```bash
-# .env
-VITE_API_MODE=mock  # Use MSW (default)
-VITE_API_MODE=real  # Use actual backend
-```
-
-### MSW Setup
-
-```tsx
-// src/mocks/browser.ts
-import { setupWorker } from 'msw/browser'
-import { handlers } from './handlers'
-
-export const worker = setupWorker(...handlers)
-
-export async function startMockServiceWorker() {
-  await worker.start({
-    onUnhandledRequest: 'bypass',
-    serviceWorker: {
-      url: '/mockServiceWorker.js',
-    },
-  })
-}
-```
-
-### Creating Mock Handlers
-
-```tsx
-// src/mocks/handlers.ts
-import { http, HttpResponse } from 'msw'
-import { ItemSchema, ItemCreateSchema } from './schemas'
-
-export const handlers = [
-  // GET /api/items
-  http.get('/api/items', ({ request }) => {
-    const url = new URL(request.url)
-    const skip = parseInt(url.searchParams.get('skip') || '0')
-    const limit = parseInt(url.searchParams.get('limit') || '100')
-
-    const paginatedItems = items.slice(skip, skip + limit)
-    return HttpResponse.json({
-      items: paginatedItems,
-      total: items.length,
-      skip,
-      limit,
-    })
-  }),
-
-  // POST /api/items
-  http.post('/api/items', async ({ request }) => {
-    const body = await request.json()
-
-    // Validate with Zod
-    const result = ItemCreateSchema.safeParse(body)
-    if (!result.success) {
-      return HttpResponse.json(
-        { detail: result.error.issues },
-        { status: 422 }
-      )
-    }
-
-    const newItem = { id: nextId++, ...result.data }
-    items.push(newItem)
-
-    return HttpResponse.json(newItem, { status: 201 })
-  }),
-]
-```
-
-### Available Mock Endpoints
+### Available Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/health` | Health check |
-| GET | `/api/items` | List items (paginated) |
-| GET | `/api/items/:id` | Get single item |
+| GET | `/api/items` | List items |
 | POST | `/api/items` | Create item |
 | PUT | `/api/items/:id` | Update item |
 | DELETE | `/api/items/:id` | Delete item |
-| GET | `/api/users` | List users |
-| GET | `/api/users/:id` | Get single user |
-| POST | `/api/users` | Create user |
+| GET/POST | `/api/users` | Users CRUD |
 | POST | `/api/auth/login` | Login (admin/admin) |
 | GET | `/api/search` | Search items |
 
-### Switching to Real Backend
-
-1. Update `.env`:
-   ```bash
-   VITE_API_MODE=real
-   VITE_API_BASE_URL=http://localhost:8000
-   ```
-
-2. MSW will not start, and requests go to actual backend
-3. Vite proxy handles CORS in development
-
 ---
 
-## Schema Validation with Zod
-
-### Overview
-
-This project uses **Zod** for schema validation, providing:
-- Runtime validation
-- TypeScript type inference
-- Consistent error handling
-
-### Schema Structure
-
-Schemas are organized in `src/schemas/` with two main categories:
-
-```
-src/schemas/
-├── api/                  # API request/response schemas
-│   ├── item.ts          # ItemCreateSchema, ItemResponseSchema, etc.
-│   ├── user.ts          # UserCreateSchema, UserResponseSchema, etc.
-│   ├── auth.ts          # LoginRequestSchema, LoginResponseSchema
-│   ├── common.ts        # HTTPErrorSchema, PaginationParamsSchema, etc.
-│   └── index.ts         # Re-exports all API schemas
-├── models/               # DB model schemas (mirrors Prisma)
-│   ├── item.ts          # ItemSchema (full entity)
-│   ├── user.ts          # UserSchema (full entity)
-│   └── index.ts         # Re-exports all model schemas
-└── index.ts              # Main entry point
-```
-
-**Import from the main entry point:**
-```tsx
-import { ItemSchema, ItemCreateSchema, UserSchema } from '@/schemas'
-```
-
-### Example: API Schema
+## Available shadcn/ui Components
 
 ```tsx
-// src/schemas/api/item.ts
-import { z } from 'zod'
-
-// Request schema
-export const ItemCreateSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  description: z.string().min(1, 'Description is required'),
-  price: z.number().positive('Price must be positive'),
-  category: z.string().min(1, 'Category is required'),
-})
-
-// Response schema
-export const ItemResponseSchema = z.object({
-  id: z.number().int().positive(),
-  name: z.string(),
-  description: z.string(),
-  price: z.number(),
-  category: z.string(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
-})
-
-// Type inference
-export type ItemCreate = z.infer<typeof ItemCreateSchema>
-export type Item = z.infer<typeof ItemResponseSchema>
-```
-
-### Using Schemas
-
-```tsx
-import { ItemCreateSchema, type ItemCreate } from '@/schemas'
-
-// Validate data
-const result = ItemCreateSchema.safeParse(userData)
-
-if (result.success) {
-  // result.data is typed as ItemCreate
-  const validData = result.data
-} else {
-  // Handle validation errors
-  console.error(result.error.issues)
-}
-```
-
-### Available Schemas
-
-**API Schemas** (`src/schemas/api/`):
-- **Item**: `ItemCreateSchema`, `ItemUpdateSchema`, `ItemResponseSchema`, `ItemsListResponseSchema`
-- **User**: `UserCreateSchema`, `UserResponseSchema`, `UsersListResponseSchema`
-- **Auth**: `LoginRequestSchema`, `LoginResponseSchema`, `UserInfoSchema`
-- **Common**: `HTTPErrorSchema`, `HTTPValidationErrorSchema`, `HealthCheckSchema`, `SearchResponseSchema`, `PaginationParamsSchema`
-
-**Model Schemas** (`src/schemas/models/`):
-- **Item**: `ItemSchema`, `ItemBaseSchema`
-- **User**: `UserSchema`, `UserBaseSchema`
-
-### Prisma Integration
-
-The `prisma/schema.prisma` file defines the database models. Model schemas in `src/schemas/models/` mirror these Prisma models. When `prisma generate` is available, these can be auto-generated using `zod-prisma-types`.
-
-**Current workflow** (without DB):
-1. Define models in `prisma/schema.prisma`
-2. Manually update `src/schemas/models/` to match
-3. API schemas extend or reference model schemas
-
-**Future workflow** (with DB):
-1. Define models in `prisma/schema.prisma`
-2. Run `pnpm prisma:generate` to auto-generate Zod schemas
-3. API schemas import from generated files
-
----
-
-## Testing
-
-### Test Framework: Vitest
-
-**Configuration**: Tests run via Vitest with jsdom environment.
-
-**Running Tests**:
-```bash
-pnpm test         # Run all tests
-```
-
-### Writing Component Tests
-
-```tsx
-// src/components/__tests__/Header.test.tsx
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import Header from '../Header'
-
-describe('Header Component', () => {
-  it('renders menu button', () => {
-    render(<Header />)
-    const menuButton = screen.getByRole('button', { name: /menu/i })
-    expect(menuButton).toBeDefined()
-  })
-})
-```
-
-### Testing TanStack Query Hooks
-
-```tsx
-import { describe, it, expect } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
-import { useItems } from '@/api/services'
-
-describe('useItems', () => {
-  it('fetches items', async () => {
-    const queryClient = new QueryClient()
-
-    const { result } = renderHook(() => useItems(), {
-      wrapper: ({ children }) => (
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      ),
-    })
-
-    await waitFor(() => {
-      expect(result.current.isSuccess).toBe(true)
-    })
-  })
-})
-```
-
----
-
-## Common Tasks
-
-### Task 1: Add a New API Endpoint
-
-**Step 1**: Add Zod schemas in `src/mocks/schemas.ts`:
-```tsx
-export const ProductSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  price: z.number(),
-})
-
-export type Product = z.infer<typeof ProductSchema>
-```
-
-**Step 2**: Add MSW handler in `src/mocks/handlers.ts`:
-```tsx
-http.get('/api/products', () => {
-  return HttpResponse.json({ products: mockProducts })
-}),
-```
-
-**Step 3**: Create service in `src/api/services/products.ts`:
-```tsx
-export const useProducts = () => {
-  return useQuery({
-    queryKey: ['products'],
-    queryFn: () => apiClient.get<ProductsResponse>('/api/products'),
-  })
-}
-```
-
-**Step 4**: Export from `src/api/services/index.ts`:
-```tsx
-export * from './products'
-```
-
-### Task 2: Add a New Route
-
-```bash
-touch src/routes/products.tsx
-```
-
-```tsx
-// src/routes/products.tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { useProducts } from '@/api/services'
-
-export const Route = createFileRoute('/products')({
-  component: ProductsPage
-})
-
-function ProductsPage() {
-  const { data, isLoading } = useProducts()
-
-  if (isLoading) return <div>Loading...</div>
-
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">Products</h1>
-      {data?.products.map(p => (
-        <div key={p.id}>{p.name}</div>
-      ))}
-    </div>
-  )
-}
-```
-
-### Task 3: Add a New Zustand Slice
-
-**Step 1**: Create slice in `src/stores/slices/authSlice.ts`:
-```tsx
-import { StateCreator } from 'zustand'
-
-export interface AuthSlice {
-  user: User | null
-  isAuthenticated: boolean
-  login: (token: string, user: User) => void
-  logout: () => void
-}
-
-export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
-  user: null,
-  isAuthenticated: false,
-  login: (token, user) => {
-    localStorage.setItem('token', token)
-    set({ user, isAuthenticated: true })
-  },
-  logout: () => {
-    localStorage.removeItem('token')
-    set({ user: null, isAuthenticated: false })
-  },
-})
-```
-
-**Step 2**: Add to main store in `src/stores/index.ts`:
-```tsx
-import { createAuthSlice, AuthSlice } from './slices/authSlice'
-
-export type Store = ApiSlice & UiSlice & TaskSlice & WorkflowSlice & AuthSlice
-
-// Add to store creation
-...createAuthSlice(...args),
-```
-
-### Task 4: Add shadcn/ui Component
-
-```bash
-pnpx shadcn@latest add button
-pnpx shadcn@latest add card
-
-# Use in your code:
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Progress } from '@/components/ui/progress'
+import { Select, SelectContent, SelectItem } from '@/components/ui/select'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import { Sheet, SheetContent } from '@/components/ui/sheet'
 ```
 
 ---
@@ -1312,156 +375,58 @@ import { Button } from '@/components/ui/button'
 
 ### Critical Rules
 
-1. **DO NOT Edit Auto-Generated Files**
-   - `src/routes/routeTree.gen.ts` is auto-generated by TanStack Router plugin
-   - Never manually modify this file
+1. **DO NOT** edit `routeTree.gen.ts` (auto-generated)
+2. **Use pnpm** - not npm or yarn
+3. **TypeScript strict mode** - no `any` types
+4. **TanStack Query** for server state, **Zustand** for client state
+5. **i18n** for all user-facing text
+6. **Zod** for all API validation
 
-2. **Use pnpm, Not npm/yarn**
-   - Project uses `pnpm@10.19.0`
-   - Commands: `pnpm install`, `pnpm add`, `pnpm dev`
-
-3. **TypeScript Strict Mode**
-   - All code must be type-safe
-   - No `any` types unless absolutely necessary
-   - Use Zod schemas for type inference
-
-4. **Prefer Editing Over Creating**
-   - ALWAYS prefer editing existing files
-   - DO NOT create new files unless required
-
-5. **Use TanStack Query for Server State**
-   - All API data should use TanStack Query hooks
-   - Use Zustand only for client-side state
-   - Never duplicate server state in Zustand
-
-6. **Validate with Zod**
-   - All API schemas should have Zod validation
-   - Use `safeParse` for runtime validation
-   - Infer TypeScript types from schemas
-
-7. **Follow API Service Pattern**
-   - Create query keys factory
-   - Invalidate related queries on mutations
-   - Export hooks from index.ts
-
-8. **Git Workflow**
-   - Current branch: `claude/claude-md-mi7g0dgho4blc3b7-01SymnBd9oUjixnUYxNjpGRF`
-   - Use `git push -u origin <branch>` for pushing
-   - Use descriptive commit messages
-
-### Common Pitfalls to Avoid
+### Common Pitfalls
 
 **DON'T**:
-- Use `npm` or `yarn` instead of `pnpm`
-- Edit `routeTree.gen.ts` manually
-- Put server state in Zustand (use TanStack Query)
-- Forget to invalidate queries after mutations
-- Add emojis unless requested
-- Create unnecessary documentation files
-- Use relative imports instead of `@/` alias
-- Skip Zod validation in mock handlers
+- Use npm/yarn
+- Put server state in Zustand
+- Hardcode text (use i18n)
+- Skip Zod validation
+- Forget translations in ALL locale files
 
 **DO**:
-- Use `pnpm` for all package operations
-- Use TanStack Query for all API data
-- Use Zustand for client-only state (theme, UI)
-- Validate all data with Zod schemas
-- Follow query key factory pattern
-- Use `@/` alias for all imports
-- Invalidate related queries after mutations
-
-### File Modification Guidelines
-
-**Always Read Before Writing**:
-- Use `Read` tool before `Edit` or `Write`
-- Understand existing code structure first
-- Maintain consistent coding style
-
-**When Adding Features**:
-1. Check if similar functionality exists
-2. Add Zod schemas for validation
-3. Add MSW handlers for mocking
-4. Create TanStack Query hooks
-5. Follow established patterns
-
-### Performance Considerations
-
-- **Code Splitting**: Routes are automatically code-split
-- **Query Caching**: Leverage staleTime and gcTime
-- **Selector Hooks**: Use Zustand selectors for performance
-- **Query Keys**: Use factories for proper cache management
-
-### Security Best Practices
-
-- **Environment Variables**: Use `.env` for configuration
-- **API Keys**: Never hardcode in source
-- **Input Validation**: Always validate with Zod
-- **Token Storage**: Handle JWT tokens securely
+- Use `@/` alias for imports
+- Invalidate queries after mutations
+- Add translations to en.json, ko.json, ja.json
+- Use selector hooks for Zustand
 
 ---
 
-## Quick Reference Commands
+## Quick Reference
 
 ```bash
-# Development
-pnpm install              # Install dependencies
-pnpm dev                  # Start dev server (port 3000)
+pnpm dev                  # Start dev server
 pnpm build                # Production build
-pnpm serve                # Preview production build
 pnpm test                 # Run tests
+pnpx shadcn@latest add X  # Add UI component
 
-# Adding Dependencies
-pnpm add <package>        # Add production dependency
-pnpm add -D <package>     # Add dev dependency
-
-# shadcn/ui Components
-pnpx shadcn@latest add <component>
-
-# Git Operations
-git status
-git add .
-git commit -m "message"
-git push -u origin claude/claude-md-mi7g0dgho4blc3b7-01SymnBd9oUjixnUYxNjpGRF
+git push -u origin claude/claude-md-mi7l5ydscdhl78fr-01D9vaQmAhRnKde3E1EdZUji
 ```
-
----
-
-## Additional Resources
-
-- **TanStack Router Docs**: https://tanstack.com/router/latest
-- **TanStack Query Docs**: https://tanstack.com/query/latest
-- **MSW Docs**: https://mswjs.io/docs
-- **Zod Docs**: https://zod.dev
-- **Tailwind CSS Docs**: https://tailwindcss.com/docs
-- **shadcn/ui Components**: https://ui.shadcn.com/
-- **Zustand Docs**: https://zustand-demo.pmnd.rs/
-
----
-
-**Last Updated**: 2025-11-20
-**Maintained By**: AI Assistants (Claude Code)
 
 ---
 
 ## Changelog
 
-### 2025-11-20
-- Major update reflecting current codebase state
-- Added TanStack Query integration documentation
-- Added MSW (Mock Service Worker) documentation
-- Added Zod schema validation documentation
-- Added workflowSlice to Zustand stores
-- Updated API layer documentation with services pattern
-- Added new test pages (msw-test)
-- Updated dependencies and versions
-- Added environment configuration section
-- Added comprehensive API mocking guide
+### 2025-11-20 (Update 2)
+- Added IndexedDB with Dexie for persistent mock data
+- Added PWA support with vite-plugin-pwa
+- Added i18n with i18next (en, ko, ja)
+- Added shadcn/ui components (alert, badge, button, card, dialog, input, label, progress, select, separator, sheet)
+- Added LanguageSelector and PWAPrompt components
+- Updated MSW handlers to use IndexedDB
+- Updated uiSlice with language management
 
-### 2025-11-18 (Update 2)
-- Implemented Zustand state management with slice pattern
-- Created apiSlice, uiSlice, and taskSlice
-- Added /zustand-test route
+### 2025-11-20
+- Added TanStack Query, MSW, Zod documentation
+- Added workflowSlice
 
 ### 2025-11-18
-- Initial creation of CLAUDE.md
-- Documented core technologies and patterns
+- Initial CLAUDE.md creation
+- Zustand slice pattern implementation
