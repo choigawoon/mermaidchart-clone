@@ -16,11 +16,11 @@
  */
 
 import Dexie, { type EntityTable } from 'dexie'
-import type { ItemEntity, UserEntity } from './entities'
-import { initialItems, initialUsers } from './seed'
+import type { ItemEntity, UserEntity, ContentEntity } from './entities'
+import { initialItems, initialUsers, initialContents } from './seed'
 
 // Re-export entity types for convenience
-export type { ItemEntity, UserEntity } from './entities'
+export type { ItemEntity, UserEntity, ContentEntity } from './entities'
 
 // =============================================================================
 // Backend Mock Database Class
@@ -35,13 +35,15 @@ export type { ItemEntity, UserEntity } from './entities'
 export class BackendMockDatabase extends Dexie {
   items!: EntityTable<ItemEntity, 'id'>
   users!: EntityTable<UserEntity, 'id'>
+  contents!: EntityTable<ContentEntity, 'id'>
 
   constructor() {
     super('BackendMockDB')
 
-    this.version(1).stores({
+    this.version(2).stores({
       items: '++id, name, category, created_at',
       users: '++id, email, username, created_at',
+      contents: '++id, &alias, author, is_public, created_at',
     })
   }
 }
@@ -83,6 +85,13 @@ export async function initializeBackendDb(): Promise<void> {
       console.log('[BackendDB] Seeded users table with initial data')
     }
 
+    // Check if contents table is empty
+    const contentCount = await backendDb.contents.count()
+    if (contentCount === 0) {
+      await backendDb.contents.bulkAdd(initialContents)
+      console.log('[BackendDB] Seeded contents table with initial data')
+    }
+
     console.log('[BackendDB] Backend mock database initialized successfully')
   } catch (error) {
     console.error('[BackendDB] Failed to initialize backend mock database:', error)
@@ -96,6 +105,7 @@ export async function initializeBackendDb(): Promise<void> {
 export async function clearBackendDb(): Promise<void> {
   await backendDb.items.clear()
   await backendDb.users.clear()
+  await backendDb.contents.clear()
   console.log('[BackendDB] Database cleared')
 }
 

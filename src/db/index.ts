@@ -63,7 +63,7 @@ export {
 } from './backend'
 
 // Entity types
-export type { ItemEntity, UserEntity } from './backend'
+export type { ItemEntity, UserEntity, ContentEntity } from './backend'
 
 // =============================================================================
 // Frontend Database Exports (for components & state)

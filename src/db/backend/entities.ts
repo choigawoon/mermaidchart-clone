@@ -38,3 +38,19 @@ export interface UserEntity {
   is_active: boolean
   created_at: string
 }
+
+/**
+ * Shared content entity stored in IndexedDB
+ * For testing content sharing with id/alias
+ */
+export interface ContentEntity {
+  id?: number
+  alias: string // URL-friendly unique identifier
+  title: string
+  content: string
+  author: string
+  is_public: boolean
+  view_count: number
+  created_at: string
+  updated_at: string
+}

@@ -8,7 +8,7 @@
  * (e.g., Prisma seed scripts, database migrations).
  */
 
-import type { ItemEntity, UserEntity } from './entities'
+import type { ItemEntity, UserEntity, ContentEntity } from './entities'
 
 // =============================================================================
 // Seed Data for Items
@@ -59,5 +59,32 @@ export const initialUsers: Omit<UserEntity, 'id'>[] = [
     full_name: '김철수',
     is_active: true,
     created_at: '2024-01-02T00:00:00Z',
+  },
+]
+
+// =============================================================================
+// Seed Data for Contents
+// =============================================================================
+
+export const initialContents: Omit<ContentEntity, 'id'>[] = [
+  {
+    alias: 'welcome-demo',
+    title: '환영합니다!',
+    content: '이것은 공유 가능한 콘텐츠 데모입니다. URL을 통해 이 콘텐츠에 접근할 수 있습니다.',
+    author: '관리자',
+    is_public: true,
+    view_count: 42,
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: '2024-01-01T00:00:00Z',
+  },
+  {
+    alias: 'hello-world',
+    title: 'Hello World',
+    content: 'This is a sample shared content. You can access it via /db-test/hello-world or /db-test/2',
+    author: 'Demo User',
+    is_public: true,
+    view_count: 15,
+    created_at: '2024-01-02T00:00:00Z',
+    updated_at: '2024-01-02T00:00:00Z',
   },
 ]
