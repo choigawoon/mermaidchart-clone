@@ -50,11 +50,11 @@ This is a modern React application built with TanStack Router, featuring:
 
 ### Project Status
 
-- **Current Branch**: `claude/separate-db-storage-019pzDmAqkQcjXvSgKPG3o4F`
+- **Current Branch**: `claude/update-docs-01VCaD6oasCTjewpbsRtgZ1v`
 - **Git Status**: Active development
-- **Last Feature**: DB test page for content sharing demo
+- **Last Feature**: Documentation restructure
 - **Architecture**: Two-database architecture (BackendMockDB + FrontendDB)
-- **Implemented Features**: i18n (en/ko/ja), PWA, Tauri 2.0, MSW mocking, Zustand state
+- **Implemented Features**: i18n (en/ko/ja), PWA, Tauri 2.0, MSW mocking, Zustand state, Content sharing
 
 ---
 
@@ -152,7 +152,7 @@ yarn install # Wrong package manager
 │   │   ├── index.ts            # Entry point (exports both DBs)
 │   │   ├── backend/            # Backend mock DB (replaced in production)
 │   │   │   ├── index.ts        # BackendMockDB class & functions
-│   │   │   ├── entities.ts     # items, users entities
+│   │   │   ├── entities.ts     # items, users, contents entities
 │   │   │   └── seed.ts         # Development seed data
 │   │   └── frontend/           # Frontend local DB (persists in production)
 │   │       ├── index.ts        # FrontendDB class & helpers
@@ -182,6 +182,9 @@ yarn install # Wrong package manager
 │   │   ├── index.tsx           # Home page (/)
 │   │   ├── zustand-test.tsx    # Zustand test page
 │   │   ├── msw-test.tsx        # MSW + TanStack Query test page
+│   │   ├── db-test/            # Content sharing demo
+│   │   │   ├── index.tsx       # Content list (/db-test)
+│   │   │   └── $id.tsx         # Content detail (/db-test/:id)
 │   │   └── routeTree.gen.ts    # AUTO-GENERATED - DO NOT EDIT
 │   ├── stores/                  # Zustand state management
 │   │   ├── slices/             # apiSlice, uiSlice, taskSlice, workflowSlice
@@ -434,7 +437,7 @@ This project uses **two separate IndexedDB databases** to logically separate bac
 
 | Directory | Database | Purpose | Production |
 |-----------|----------|---------|------------|
-| `src/db/backend/` | BackendMockDB | Mock API data (items, users) | **NOT used** |
+| `src/db/backend/` | BackendMockDB | Mock API data (items, users, contents) | **NOT used** |
 | `src/db/frontend/` | FrontendDB | Local data (settings, drafts) | **Still used** |
 | `src/schemas/` | - | API contracts | Both modes |
 | `src/mocks/` | - | MSW handlers | Mock only |
@@ -525,9 +528,11 @@ await resetBackendDb()
 **Tables**:
 - **items**: id, name, description, price, category, created_at, updated_at
 - **users**: id, email, username, full_name, is_active, created_at
+- **contents**: id, alias, title, content, author, is_public, view_count, created_at, updated_at
 
 **Seed Data** (src/db/backend/seed.ts):
 - 3 sample items (노트북, 마우스, 키보드)
+- 2 sample contents (콘텐츠 공유 데모)
 - 2 sample users (홍길동, 김철수)
 
 ---
@@ -947,11 +952,22 @@ pnpx shadcn@latest add X  # Add UI component
 
 ## Changelog
 
+### 2025-11-22 (Update 2)
+- **Documentation restructure**:
+  - Simplified README.md to focus on core value proposition
+  - Created unified ROADMAP.md (from SERVICE_ARCHITECTURE.md + BACKEND_ROADMAP.md)
+  - Created TASKS.md (from FEATURES_ROADMAP.md)
+  - Added CONTRIBUTING.md for contributor guidelines
+  - Updated CLAUDE.md with latest code state
+  - Removed API_INTEGRATION.md, BACKEND_ROADMAP.md, FEATURES_ROADMAP.md, SERVICE_ARCHITECTURE.md
+- Added Content sharing feature (db-test routes)
+- Added ContentEntity to BackendMockDB
+
 ### 2025-11-22
 - **Two-database architecture for logical separation**:
   - Created `src/db/backend/` for BackendMockDB (API mock data)
   - Created `src/db/frontend/` for FrontendDB (local persistent data)
-  - BackendMockDB: items, users (replaced by real backend in production)
+  - BackendMockDB: items, users, contents (replaced by real backend in production)
   - FrontendDB: settings, drafts, cache, recentItems (persists in production)
 - Added comprehensive Storage Architecture documentation with diagrams
 - Added helper functions for frontend DB (getSetting, saveDraft, setCache, etc.)
